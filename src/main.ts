@@ -1,9 +1,11 @@
 import Builder from "Builder";
 import Harvester from "Harvester";
 import Renewer from "Renewer";
+import Roomer from "Roomer";
 import Upgrader from "Upgrader";
 
 declare global {
+
   const enum Role {
     Unassigned = "unassigned",
     Harvester = "harvester",
@@ -20,6 +22,8 @@ declare global {
 
 export const loop = (): void => {
   const RENEW_THRESHOLD = 200;
+  const spawnRoom = Game.spawns.Spawn1.room;
+  const home = new Roomer(spawnRoom);
 
   for (const name in Game.creeps) {
     const creep = Game.creeps[name];
@@ -46,7 +50,7 @@ export const loop = (): void => {
           Upgrader.run(creep);
           break;
         case Role.Builder:
-          Builder.run(creep);
+          Builder.run(creep, home);
           break;
       }
     }
