@@ -1,5 +1,8 @@
+import lodash from 'lodash';
+import Roomer from "Roomer";
+
 export default class Builder {
-  public static run(creep: Creep): void {
+  public static run(creep: Creep, roomer: Roomer): void {
     if (creep.memory.working && creep.store[RESOURCE_ENERGY] === 0) {
       creep.memory.working = false;
       creep.say("⛏ harvest");
@@ -12,7 +15,7 @@ export default class Builder {
 
     if (creep.memory.working) {
       const sites = creep.room.find(FIND_CONSTRUCTION_SITES);
-      const repairs = creep.room.find(FIND_STRUCTURES, { filter: Builder.needsRepair });
+      const repairs = creep.room.find(FIND_STRUCTURES, { filter: this.needsRepair });
       if (sites.length > 0) {
         const site = sites[0];
         if (creep.build(site) === ERR_NOT_IN_RANGE) {
@@ -25,16 +28,19 @@ export default class Builder {
         }
       }
     } else {
-      const sources = creep.room.find(FIND_SOURCES);
-      const source = sources[0];
-      if (creep.harvest(source) === ERR_NOT_IN_RANGE) {
-        creep.moveTo(source, { visualizePathStyle: { stroke: "#ffaa00" } });
-      }
+      const container = lodash.first(roomer.EnergyContainers());
+      if (container === undefined) return;
+      else if (creep.withdraw(container, RESOURCE_ENERGY) === ERR_NOT_IN_RANGE)
+        creep.moveTo(container, { visualizePathStyle: { stroke: "#ffaa00" } });
     }
   }
 
   private static needsRepair(structure: AnyStructure): boolean {
     const REPAIR_THRESHOLD = 0.75;
     return structure.hits < structure.hitsMax * REPAIR_THRESHOLD;
+  }
+
+  private static isContainer(structure: AnyStructure): structure is StructureContainer {
+    return (structure as StructureContainer).store !== undefined;
   }
 }
