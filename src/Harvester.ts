@@ -21,7 +21,8 @@ export default class Harvester {
     } else {
       const targets = creep.room.find(FIND_STRUCTURES, { filter: Harvester.hasEnergyCapacity });
       if (targets.length > 0) {
-        const target = lodash.sortBy(targets, target => target.structureType)[0];
+        const target = lodash.last(lodash.sortBy(targets, target => target.structureType));
+        if (target === undefined) return;
         if (creep.transfer(target, RESOURCE_ENERGY) === ERR_NOT_IN_RANGE) {
           creep.moveTo(target, { visualizePathStyle: { stroke: "#ffffff" } });
         }
