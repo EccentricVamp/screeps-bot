@@ -1,4 +1,4 @@
-export class Renewer {
+export default class Renewer {
   public static run(creep: Creep): void {
     const spawns = creep.room.find(FIND_MY_SPAWNS);
     if (spawns.length > 0) {

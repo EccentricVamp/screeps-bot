@@ -1,4 +1,4 @@
-export class Harvester {
+export default class Harvester {
   public static run(creep: Creep): void {
     if (creep.memory.working && creep.store.getFreeCapacity() === 0) {
       creep.memory.working = false;

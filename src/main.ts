@@ -1,7 +1,7 @@
-import { Builder } from "Builder";
-import { Harvester } from "Harvester";
-import { Renewer } from "Renewer";
-import { Upgrader } from "Upgrader";
+import Builder from "Builder";
+import Harvester from "Harvester";
+import Renewer from "Renewer";
+import Upgrader from "Upgrader";
 
 declare global {
   const enum Role {
