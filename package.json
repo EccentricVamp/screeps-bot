@@ -1,0 +1,35 @@
+{
+  "main": "main.js",
+  "scripts": {
+    "lint": "eslint \"src/**/*.ts\"",
+    "build": "rollup -c",
+    "push": "rollup -c --environment DEST:main",
+    "watch": "rollup -cw --environment DEST:main"
+  },
+  "engines": {
+    "node": "10.x || 12.x"
+  },
+  "devDependencies": {
+    "@rollup/plugin-commonjs": "^11.1.0",
+    "@rollup/plugin-node-resolve": "^7.1.3",
+    "@types/lodash": "3.10.2",
+    "@types/node": "^13.13.1",
+    "@types/screeps": "^3.1.0",
+    "@typescript-eslint/eslint-plugin": "^3.7.0",
+    "@typescript-eslint/parser": "^3.7.0",
+    "@typescript-eslint/typescript-estree": "^3.7.0",
+    "eslint": "^6.8.0",
+    "eslint-config-prettier": "^6.11.0",
+    "eslint-import-resolver-typescript": "^2.0.0",
+    "eslint-plugin-import": "^2.22.0",
+    "eslint-plugin-prettier": "^3.1.4",
+    "prettier": "^2.0.4",
+    "rollup": "^2.6.1",
+    "rollup-plugin-clear": "^2.0.7",
+    "rollup-plugin-screeps": "^1.0.0",
+    "rollup-plugin-typescript2": "^0.27.0",
+    "ts-node": "^8.8.2",
+    "tsconfig-paths": "^3.9.0",
+    "typescript": "^3.8.3"
+  }
+}

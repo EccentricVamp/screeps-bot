@@ -1,0 +1,8 @@
+// https://aka.ms/devcontainer.json
+{
+  "name": "Screeps",
+  "dockerFile": "Dockerfile",
+  "settings": {
+    "terminal.integrated.shell.linux": null
+  },
+}
