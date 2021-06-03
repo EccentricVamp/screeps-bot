@@ -1,19 +1,17 @@
 {
   "compilerOptions": {
     "lib": [
-      "esnext"
+      "ESNext"
     ],
-    "module": "esnext",
+    "module": "ESNext",
     "target": "ES2017",
     "strict": true,
-    "moduleResolution": "Node",
-    "outDir": "dist",
-    "baseUrl": "src/",
-    "sourceMap": true,
-    "experimentalDecorators": true,
     "noImplicitReturns": true,
     "allowSyntheticDefaultImports": true,
-    "allowUnreachableCode": false
+    "allowUnreachableCode": false,
+    "experimentalDecorators": true,
+    "outDir": "dist",
+    "baseUrl": "src/",
   },
   "exclude": [
     "node_modules"
