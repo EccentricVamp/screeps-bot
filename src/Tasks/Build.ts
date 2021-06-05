@@ -8,6 +8,14 @@ export default class Build implements Task {
     this.target = target;
   }
 
+  public interview(creep: Creep): number | null {
+    if (creep.getActiveBodyparts(CARRY) > 0) {
+      return creep.getActiveBodyparts(CARRY) +
+        creep.getActiveBodyparts(WORK) +
+        creep.getActiveBodyparts(MOVE);
+    } else return null;
+  }
+
   public perform(creep: Creep): boolean {
     const HARVESTING = 2;
     const BUILDING = 1;

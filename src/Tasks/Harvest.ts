@@ -14,6 +14,12 @@ export default class Harvest implements Task {
     this.target = target;
   }
 
+  public interview(creep: Creep): number | null {
+    if (creep.getActiveBodyparts(CARRY) > 0) {
+      return creep.getActiveBodyparts(WORK);
+    } else return null;
+  }
+
   public perform(creep: Creep): boolean {
     const HARVESTING = 2;
     const TRANSFERING = 1;

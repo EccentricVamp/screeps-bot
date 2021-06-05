@@ -6,6 +6,10 @@ export default class Renew implements Task {
     this.target = target;
   }
 
+  public interview(creep: Creep): number | null {
+    return null;
+  }
+
   public perform(creep: Creep): boolean {
     const RENEWING = 99;
 
