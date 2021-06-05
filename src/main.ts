@@ -1,30 +1,49 @@
+import Build from "Tasks/Build";
 import Harvest from "Tasks/Harvest";
+import Task from "Tasks/Task";
+//import Upgrade from "Tasks/Upgrade";
 import _ from "lodash";
 
 declare global {
   interface CreepMemory {
-    status: number;
+    status: number | null;
   }
 }
 
 export const loop = (): void => {
-  // Get first value from room dictionary.
   const room = Object.values(Game.rooms)[0];
-
   const spawn = room.find(FIND_MY_SPAWNS)[0];
+  const creeps = room.find(FIND_MY_CREEPS);
+  const tasks = new Array<Task>();
+  const sites = room.find(FIND_CONSTRUCTION_SITES);
 
   if (spawn.store.getFreeCapacity(RESOURCE_ENERGY) > 0) {
-    const source = room.find(FIND_SOURCES_ACTIVE)[0];
-    const creeps = room.find(FIND_MY_CREEPS, {
-      filter: creep => {
-        const parts = _.map(creep.body, part => part.type);
-        return _.difference([WORK, CARRY, MOVE], parts).length === 0 && creep.memory.status === undefined;
-      }
-    });
-    const storing = new Harvest(1, RESOURCE_ENERGY, source, spawn);
+    const source = spawn.pos.findClosestByRange(FIND_SOURCES_ACTIVE);
+    if (source !== null) {
+      const harvest = new Harvest(1, RESOURCE_ENERGY, source, spawn);
+      tasks.push(harvest);
+    }
+  }
 
-    for (const creep of creeps) {
-      storing.perform(creep);
+  if (sites.length > 0) {
+    const site = sites[0];
+    const source = site.pos.findClosestByRange(FIND_SOURCES_ACTIVE);
+    if (source !== null) {
+      const build = new Build(0.5, source, site);
+      tasks.push(build);
+    }
+  }
+
+  for(const task of tasks) {
+    let complete = false;
+
+    const creep = creeps.pop();
+    if(creep === undefined) break;
+
+    complete = task.perform(creep);
+    if (complete) {
+      creep.memory.status = null;
+      creeps.push(creep);
     }
   }
 
