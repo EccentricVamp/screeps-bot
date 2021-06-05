@@ -1,17 +1,14 @@
-const HARVESTING = 2;
-const TRANSFERING = 1;
-
 import Task from "Tasks/Task";
 export default class Harvest extends Task {
   private resource: ResourceConstant;
   private source: Source | Mineral | Deposit;
-  private target: Structure;
+  private target: StructureSpawn | StructureContainer;
 
   public constructor(
     priority: number,
     resource: ResourceConstant,
     source: Source | Mineral | Deposit,
-    target: Structure
+    target: StructureSpawn | StructureContainer
   ) {
     super(priority);
     this.resource = resource;
@@ -19,7 +16,10 @@ export default class Harvest extends Task {
     this.target = target;
   }
 
-  public perform(creep: Creep): void {
+  public perform(creep: Creep): boolean {
+    const HARVESTING = 2;
+    const TRANSFERING = 1;
+
     if (creep.memory.status !== TRANSFERING && creep.store.getFreeCapacity() === 0) {
       creep.memory.status = TRANSFERING;
       creep.say("🏦 transfer");
@@ -38,6 +38,12 @@ export default class Harvest extends Task {
       if (creep.harvest(this.source) === ERR_NOT_IN_RANGE) {
         creep.moveTo(this.source, { visualizePathStyle: { stroke: "#ffaa00" } });
       }
+    }
+
+    if (this.target.structureType === STRUCTURE_CONTAINER) {
+      return this.target.store.getFreeCapacity() === 0;
+    } else {
+      return this.target.store.getFreeCapacity() === 0;
     }
   }
 }
