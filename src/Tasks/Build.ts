@@ -10,8 +10,7 @@ export default class Build implements Task {
 
   public interview(creep: Creep): number | null {
     if (creep.getActiveBodyparts(CARRY) > 0) {
-      return creep.getActiveBodyparts(CARRY) +
-        creep.getActiveBodyparts(WORK) +
+      return creep.getActiveBodyparts(CARRY) + creep.getActiveBodyparts(WORK) +
         creep.getActiveBodyparts(MOVE);
     } else return null;
   }

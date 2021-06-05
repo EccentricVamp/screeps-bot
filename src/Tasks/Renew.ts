@@ -6,7 +6,7 @@ export default class Renew implements Task {
     this.target = target;
   }
 
-  public interview(creep: Creep): number | null {
+  public interview(_: Creep): number | null {
     return null;
   }
 
@@ -18,11 +18,11 @@ export default class Renew implements Task {
       creep.say("🔄 renew");
     }
 
-    var result = this.target.renewCreep(creep);
+    const result = this.target.renewCreep(creep);
     if (result === ERR_NOT_IN_RANGE) {
       creep.moveTo(this.target, { visualizePathStyle: { stroke: "#ffffff" } });
     }
 
-    return result === ERR_FULL
+    return result === ERR_FULL;
   }
 }
