@@ -1,58 +1,30 @@
-import Builder from "Builder";
-import Harvester from "Harvester";
-import Renewer from "Renewer";
-import Roomer from "Roomer";
-import Upgrader from "Upgrader";
+import Harvest from "Tasks/Harvest";
+import _ from "lodash";
 
 declare global {
-
-  const enum Role {
-    Unassigned = "unassigned",
-    Harvester = "harvester",
-    Upgrader = "upgrader",
-    Builder = "builder"
-  }
-
   interface CreepMemory {
-    role: Role;
-    working: boolean;
-    renewing: boolean;
+    status: number;
   }
 }
 
 export const loop = (): void => {
-  const RENEW_THRESHOLD = 200;
-  const spawnRoom = Game.spawns.Spawn1.room;
-  const home = new Roomer(spawnRoom);
+  // Get first value from room dictionary.
+  const room = Object.values(Game.rooms)[0];
 
-  for (const name in Game.creeps) {
-    const creep = Game.creeps[name];
+  const spawn = room.find(FIND_MY_SPAWNS)[0];
 
-    if (creep.spawning) {
-      if (creep.memory.role === undefined) creep.memory.role = Role.Unassigned;
-      if (creep.memory.working === undefined) creep.memory.working = false;
-      if (creep.memory.renewing === undefined) creep.memory.renewing = false;
-      continue;
-    }
-
-    if (creep.ticksToLive !== undefined && creep.ticksToLive < RENEW_THRESHOLD) {
-      creep.say("⟳ renew");
-      creep.memory.renewing = true;
-    }
-
-    if (creep.memory.renewing) Renewer.run(creep);
-    else {
-      switch (creep.memory.role) {
-        case Role.Harvester:
-          Harvester.run(creep);
-          break;
-        case Role.Upgrader:
-          Upgrader.run(creep);
-          break;
-        case Role.Builder:
-          Builder.run(creep, home);
-          break;
+  if (spawn.store.getFreeCapacity(RESOURCE_ENERGY) > 0) {
+    const source = room.find(FIND_SOURCES_ACTIVE)[0];
+    const creeps = room.find(FIND_MY_CREEPS, {
+      filter: creep => {
+        const parts = _.map(creep.body, part => part.type);
+        return _.difference([WORK, CARRY, MOVE], parts).length === 0 && creep.memory.status === undefined;
       }
+    });
+    const storing = new Harvest(1, RESOURCE_ENERGY, source, spawn);
+
+    for (const creep of creeps) {
+      storing.perform(creep);
     }
   }
 
