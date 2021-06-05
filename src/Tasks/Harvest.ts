@@ -1,16 +1,14 @@
 import Task from "Tasks/Task";
-export default class Harvest extends Task {
+export default class Harvest implements Task {
   private resource: ResourceConstant;
   private source: Source | Mineral | Deposit;
   private target: StructureSpawn | StructureContainer;
 
   public constructor(
-    priority: number,
     resource: ResourceConstant,
     source: Source | Mineral | Deposit,
     target: StructureSpawn | StructureContainer
   ) {
-    super(priority);
     this.resource = resource;
     this.source = source;
     this.target = target;

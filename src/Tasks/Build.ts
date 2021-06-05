@@ -1,10 +1,9 @@
 import Task from "Tasks/Task";
-export default class Build extends Task {
+export default class Build implements Task {
   private source: Source;
   private target: ConstructionSite;
 
-  public constructor(priority: number, source: Source, target: ConstructionSite) {
-    super(priority);
+  public constructor(source: Source, target: ConstructionSite) {
     this.source = source;
     this.target = target;
   }
