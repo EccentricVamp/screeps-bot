@@ -2,7 +2,8 @@ import Build from "Tasks/Build";
 import Harvest from "Tasks/Harvest";
 import Renew from "Tasks/Renew";
 import Task from "Tasks/Task";
-//import Upgrade from "Tasks/Upgrade";
+import Transport from "Tasks/Transport";
+// import Upgrade from "Tasks/Upgrade";
 import _ from "lodash";
 
 declare global {
@@ -11,7 +12,19 @@ declare global {
   }
 }
 
+
+
 export const loop = (): void => {
+  const STORES = [ STRUCTURE_CONTAINER, STRUCTURE_STORAGE ]
+
+  function hasEnergy(structure: AnyStructure): structure is StructureContainer | StructureStorage {
+    return structure.structureType in STORES && (structure as StructureContainer | StructureStorage).store[RESOURCE_ENERGY] > 0;
+  }
+
+  function hasFreeCapacity(structure: AnyStructure): structure is StructureContainer | StructureStorage {
+    return structure.structureType in STORES && (structure as StructureContainer | StructureStorage).store.getFreeCapacity(RESOURCE_ENERGY) > 0;
+  }
+
   const RENEWING = 99;
   const RENEW_THRESHOLD = 500;
 
@@ -20,10 +33,12 @@ export const loop = (): void => {
   const spawn = room.find(FIND_MY_SPAWNS)[0];
   const creeps = room.find(FIND_MY_CREEPS);
   const sites = room.find(FIND_CONSTRUCTION_SITES);
+  const energyStores = room.find(FIND_STRUCTURES, { filter: hasEnergy });
+  const freeStores = room.find(FIND_STRUCTURES, { filter: hasFreeCapacity });
 
   const renew = new Renew(spawn);
-  for(const creep of creeps) {
-    if (creep.ticksToLive !== undefined && creep.ticksToLive < RENEW_THRESHOLD || creep.memory.status === RENEWING) {
+  for (const creep of creeps) {
+    if ((creep.ticksToLive !== undefined && creep.ticksToLive < RENEW_THRESHOLD) || creep.memory.status === RENEWING) {
       const complete = renew.perform(creep);
       if (complete) creep.memory.status = null;
       else _.remove(creeps, creep);
@@ -31,9 +46,26 @@ export const loop = (): void => {
   }
 
   if (spawn.store.getFreeCapacity(RESOURCE_ENERGY) > 0) {
-    const source = spawn.pos.findClosestByRange(FIND_SOURCES_ACTIVE);
-    if (source !== null) {
-      const harvest = new Harvest(RESOURCE_ENERGY, source, spawn);
+    if (energyStores.length > 0) {
+      const store = energyStores[0];
+      if (store !== null && hasEnergy(store)) {
+        const transport = new Transport(RESOURCE_ENERGY, store, spawn);
+        tasks.push(transport);
+      }
+    } else {
+      const source = spawn.pos.findClosestByRange(FIND_SOURCES_ACTIVE);
+      if (source !== null) {
+        const harvest = new Harvest(RESOURCE_ENERGY, source, spawn);
+        tasks.push(harvest);
+      }
+    }
+  }
+
+  if (freeStores.length > 0) {
+    const store = freeStores[0];
+    const source = store.pos.findClosestByRange(FIND_SOURCES_ACTIVE);
+    if (source !== null && hasFreeCapacity(store)) {
+      const harvest = new Harvest(RESOURCE_ENERGY, source, store);
       tasks.push(harvest);
     }
   }
@@ -47,12 +79,14 @@ export const loop = (): void => {
     }
   }
 
-  for(const task of tasks) {
+  for (const task of tasks) {
     let complete = false;
 
-    const creep = creeps.pop();
+    const interviewees = _.sortBy(creeps, task.interview)
+    const creep = _.last(interviewees);
     if(creep === undefined) break;
 
+    _.pull(creeps, creep);
     complete = task.perform(creep);
     if (complete) {
       creep.memory.status = null;
