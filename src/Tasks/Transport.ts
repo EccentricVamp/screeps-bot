@@ -2,12 +2,12 @@ import Task from "Tasks/Task";
 export default class Transport implements Task {
   private resource: ResourceConstant;
   private source: StructureContainer | StructureStorage;
-  private target: StructureSpawn | StructureContainer;
+  private target: StructureSpawn | StructureContainer | StructureStorage;
 
   public constructor(
     resource: ResourceConstant,
     source: StructureContainer | StructureStorage,
-    target: StructureSpawn | StructureContainer
+    target: StructureSpawn | StructureContainer | StructureStorage
   ) {
     this.resource = resource;
     this.source = source;
@@ -27,12 +27,12 @@ export default class Transport implements Task {
 
     if (creep.memory.status === null || (creep.memory.status !== TRANSFER && creep.store.getFreeCapacity() === 0)) {
       creep.memory.status = TRANSFER;
-      creep.say("🚚 transfer");
+      creep.say("⇪ transfer");
     }
 
     if (creep.memory.status !== WITHDRAW && creep.store[this.resource] === 0) {
       creep.memory.status = WITHDRAW;
-      creep.say("🚚 withdraw");
+      creep.say("⇩ withdraw");
     }
 
     if (creep.memory.status === TRANSFER) {
