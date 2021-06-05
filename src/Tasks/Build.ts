@@ -12,14 +12,14 @@ export default class Build implements Task {
     const HARVESTING = 2;
     const BUILDING = 1;
 
-    if (creep.memory.status !== BUILDING && creep.store.getFreeCapacity() === 0) {
+    if (creep.memory.status === null || (creep.memory.status !== BUILDING && creep.store.getFreeCapacity() === 0)) {
       creep.memory.status = BUILDING;
       creep.say("🏗️ build");
     }
 
     if (creep.memory.status !== HARVESTING && creep.store[RESOURCE_ENERGY] === 0) {
       creep.memory.status = HARVESTING;
-      creep.say("⛏ harvest");
+      creep.say("⚒️ harvest");
     }
 
     if (creep.memory.status === BUILDING) {
