@@ -5,6 +5,7 @@ import Task from "Tasks/Task";
 import Transport from "Tasks/Transport";
 // import Upgrade from "Tasks/Upgrade";
 import _ from "lodash";
+import Upgrade from "Tasks/Upgrade";
 
 declare global {
   interface CreepMemory {
@@ -34,6 +35,7 @@ export const loop = (): void => {
 
   const tasks = new Array<Task>();
   const room = Object.values(Game.rooms)[0];
+  const controller = room.controller;
   const spawn = room.find(FIND_MY_SPAWNS)[0];
   const creeps = room.find(FIND_MY_CREEPS);
   const sites = room.find(FIND_CONSTRUCTION_SITES);
@@ -71,6 +73,14 @@ export const loop = (): void => {
     if (source !== null && hasFreeCapacity(store)) {
       const harvest = new Harvest(RESOURCE_ENERGY, source, store);
       tasks.push(harvest);
+    }
+  }
+
+  if (energyStores.length > 0) {
+    const store = energyStores[0];
+    if (controller !== undefined && hasEnergy(store)) {
+      const upgrade = new Upgrade(store, controller);
+      tasks.push(upgrade);
     }
   }
 
