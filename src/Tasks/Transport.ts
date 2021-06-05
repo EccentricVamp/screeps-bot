@@ -45,7 +45,7 @@ export default class Transport implements Task {
       }
     }
 
-    if (this.target.structureType === STRUCTURE_CONTAINER) {
+    if (this.target.structureType === STRUCTURE_SPAWN) {
       return this.target.store.getFreeCapacity() === 0 || this.source.store[this.resource] === 0;
     } else {
       return this.target.store.getFreeCapacity() === 0 || this.source.store[this.resource] === 0;
