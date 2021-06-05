@@ -5,5 +5,5 @@ export default abstract class Task {
     this.priority = priority;
   }
 
-  public abstract perform(creep: Creep): void;
+  public abstract perform(creep: Creep): boolean;
 }
