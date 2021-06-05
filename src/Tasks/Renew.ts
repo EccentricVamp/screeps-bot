@@ -6,7 +6,7 @@ export default class Renew implements Task {
     this.target = target;
   }
 
-  public interview(_: Creep): number | null {
+  public interview(): number | null {
     return null;
   }
 
