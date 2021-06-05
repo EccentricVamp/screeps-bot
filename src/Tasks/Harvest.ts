@@ -20,12 +20,12 @@ export default class Harvest implements Task {
 
     if (creep.memory.status !== TRANSFERING && creep.store.getFreeCapacity() === 0) {
       creep.memory.status = TRANSFERING;
-      creep.say("🏦 transfer");
+      creep.say("🚚 transfer");
     }
 
     if (creep.memory.status !== HARVESTING && creep.store[this.resource] === 0) {
       creep.memory.status = HARVESTING;
-      creep.say("⛏ harvest");
+      creep.say("⚒️ harvest");
     }
 
     if (creep.memory.status === TRANSFERING) {

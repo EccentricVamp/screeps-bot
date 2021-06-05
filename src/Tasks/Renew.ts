@@ -11,7 +11,7 @@ export default class Renew implements Task {
 
     if (creep.memory.status !== RENEWING) {
       creep.memory.status = RENEWING;
-      creep.say("🏗️ renew");
+      creep.say("🔄 renew");
     }
 
     var result = this.target.renewCreep(creep);
