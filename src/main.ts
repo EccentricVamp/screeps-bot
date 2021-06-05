@@ -12,17 +12,21 @@ declare global {
   }
 }
 
-
-
 export const loop = (): void => {
-  const STORES = [ STRUCTURE_CONTAINER, STRUCTURE_STORAGE ]
+  const STORES = [STRUCTURE_CONTAINER, STRUCTURE_STORAGE];
 
   function hasEnergy(structure: AnyStructure): structure is StructureContainer | StructureStorage {
-    return structure.structureType in STORES && (structure as StructureContainer | StructureStorage).store[RESOURCE_ENERGY] > 0;
+    return (
+      _.includes(STORES, structure.structureType) &&
+      (structure as StructureContainer | StructureStorage).store[RESOURCE_ENERGY] > 0
+    );
   }
 
   function hasFreeCapacity(structure: AnyStructure): structure is StructureContainer | StructureStorage {
-    return structure.structureType in STORES && (structure as StructureContainer | StructureStorage).store.getFreeCapacity(RESOURCE_ENERGY) > 0;
+    return (
+      _.includes(STORES, structure.structureType) &&
+      (structure as StructureContainer | StructureStorage).store.getFreeCapacity() > 0
+    );
   }
 
   const RENEWING = 99;
@@ -72,19 +76,21 @@ export const loop = (): void => {
 
   if (sites.length > 0) {
     const site = sites[0];
-    const source = site.pos.findClosestByRange(FIND_SOURCES_ACTIVE);
-    if (source !== null) {
-      const build = new Build(source, site);
-      tasks.push(build);
+    if (energyStores.length > 0) {
+      const store = energyStores[0];
+      if (hasEnergy(store)) {
+        const build = new Build(store, site);
+        tasks.push(build);
+      }
     }
   }
 
   for (const task of tasks) {
     let complete = false;
 
-    const interviewees = _.sortBy(creeps, task.interview)
+    const interviewees = _.sortBy(creeps, task.interview);
     const creep = _.last(interviewees);
-    if(creep === undefined) break;
+    if (creep === undefined) break;
 
     _.pull(creeps, creep);
     complete = task.perform(creep);
