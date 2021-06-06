@@ -32,7 +32,7 @@ export default class Build implements Task {
 
     if (creep.memory.status !== WITHDRAW && creep.store[RESOURCE_ENERGY] === 0) {
       creep.memory.status = WITHDRAW;
-      creep.say("⇩ withdraw");
+      creep.say("⚡ withdraw");
     }
 
     if (creep.memory.status === BUILDING) {

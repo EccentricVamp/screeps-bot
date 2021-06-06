@@ -27,12 +27,12 @@ export default class Upgrade implements Task {
 
     if (creep.memory.status === null || (creep.memory.status !== BUILDING && creep.store.getFreeCapacity() === 0)) {
       creep.memory.status = BUILDING;
-      creep.say("🏗️ build");
+      creep.say("🏗️ upgrade");
     }
 
     if (creep.memory.status !== WITHDRAW && creep.store[RESOURCE_ENERGY] === 0) {
       creep.memory.status = WITHDRAW;
-      creep.say("⇩ withdraw");
+      creep.say("⚡ withdraw");
     }
 
     if (creep.memory.status === BUILDING) {
