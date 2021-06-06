@@ -9,9 +9,16 @@ export default class Upgrade implements Task {
   }
 
   public interview(creep: Creep): number | null {
-    if (creep.getActiveBodyparts(CARRY) > 0) {
-      return creep.getActiveBodyparts(CARRY) + creep.getActiveBodyparts(WORK) + creep.getActiveBodyparts(MOVE);
-    } else return null;
+    const work = creep.getActiveBodyparts(WORK);
+    if (work === 0) return null;
+
+    const carry = creep.getActiveBodyparts(CARRY);
+    if (carry === 0) return null;
+
+    const move = creep.getActiveBodyparts(MOVE);
+    if (move === 0) return null;
+
+    return work;
   }
 
   public perform(creep: Creep): boolean {

@@ -16,9 +16,12 @@ export default class Transport implements Task {
 
   public interview(creep: Creep): number | null {
     const carry = creep.getActiveBodyparts(CARRY);
-    if (carry > 0) {
-      return (carry + creep.getActiveBodyparts(MOVE)) / creep.body.length;
-    } else return null;
+    if (carry === 0) return null;
+
+    const move = creep.getActiveBodyparts(MOVE);
+    if (move === 0) return null;
+
+    return carry + move;
   }
 
   public perform(creep: Creep): boolean {

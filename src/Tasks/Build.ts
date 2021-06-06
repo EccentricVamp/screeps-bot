@@ -9,9 +9,16 @@ export default class Build implements Task {
   }
 
   public interview(creep: Creep): number | null {
-    if (creep.getActiveBodyparts(CARRY) > 0) {
-      return creep.getActiveBodyparts(CARRY) + creep.getActiveBodyparts(WORK) + creep.getActiveBodyparts(MOVE);
-    } else return null;
+    const work = creep.getActiveBodyparts(WORK);
+    if (work === 0) return null;
+
+    const carry = creep.getActiveBodyparts(CARRY);
+    if (carry === 0) return null;
+
+    const move = creep.getActiveBodyparts(MOVE);
+    if (move === 0) return null;
+
+    return work + carry + move;
   }
 
   public perform(creep: Creep): boolean {
@@ -29,7 +36,9 @@ export default class Build implements Task {
     }
 
     if (creep.memory.status === BUILDING) {
-      if (creep.build(this.target) === ERR_NOT_IN_RANGE) {
+      if (creep.pos.inRangeTo(this.target.pos, 3)) {
+        creep.build(this.target);
+      } else {
         creep.moveTo(this.target, { visualizePathStyle: { stroke: "#ffffff" } });
       }
     } else if (creep.memory.status === WITHDRAW) {

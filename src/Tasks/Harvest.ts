@@ -15,9 +15,16 @@ export default class Harvest implements Task {
   }
 
   public interview(creep: Creep): number | null {
-    if (creep.getActiveBodyparts(CARRY) > 0) {
-      return creep.getActiveBodyparts(WORK);
-    } else return null;
+    const work = creep.getActiveBodyparts(WORK);
+    if (work === 0) return null;
+
+    const carry = creep.getActiveBodyparts(CARRY);
+    if (carry === 0) return null;
+
+    const move = creep.getActiveBodyparts(MOVE);
+    if (move === 0) return null;
+
+    return work;
   }
 
   public perform(creep: Creep): boolean {
@@ -45,9 +52,9 @@ export default class Harvest implements Task {
     }
 
     if (this.target.structureType === STRUCTURE_SPAWN || this.target.structureType === STRUCTURE_EXTENSION) {
-      return this.target.store.getFreeCapacity() === 0;
+      return this.target.store.getFreeCapacity(this.resource) === 0;
     } else {
-      return this.target.store.getFreeCapacity() === 0;
+      return this.target.store.getFreeCapacity(this.resource) === 0;
     }
   }
 }
