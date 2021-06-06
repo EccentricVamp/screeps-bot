@@ -1,3 +1,4 @@
+import { Path, Status } from "Constants";
 import Task from "Tasks/Task";
 export default class Harvest implements Task {
   private resource: ResourceConstant;
@@ -33,21 +34,21 @@ export default class Harvest implements Task {
 
     if (creep.memory.status === null || (creep.memory.status !== TRANSFERING && creep.store.getFreeCapacity() === 0)) {
       creep.memory.status = TRANSFERING;
-      creep.say("🚚 transfer");
+      creep.say(Status.Transfer);
     }
 
     if (creep.memory.status !== HARVESTING && creep.store[this.resource] === 0) {
       creep.memory.status = HARVESTING;
-      creep.say("⚒️ harvest");
+      creep.say(Status.Harvest);
     }
 
     if (creep.memory.status === TRANSFERING) {
       if (creep.transfer(this.target, this.resource) === ERR_NOT_IN_RANGE) {
-        creep.moveTo(this.target, { visualizePathStyle: { stroke: "#ffffff" } });
+        creep.moveTo(this.target, Path.Default);
       }
     } else if (creep.memory.status === HARVESTING) {
       if (creep.harvest(this.source) === ERR_NOT_IN_RANGE) {
-        creep.moveTo(this.source, { visualizePathStyle: { stroke: "#ffaa00" } });
+        creep.moveTo(this.source, Path.Energy);
       }
     }
 

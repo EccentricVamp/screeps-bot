@@ -1,3 +1,4 @@
+import { Path, Status } from "Constants";
 import Task from "Tasks/Task";
 export default class Upgrade implements Task {
   private source: StructureContainer | StructureStorage;
@@ -27,21 +28,21 @@ export default class Upgrade implements Task {
 
     if (creep.memory.status === null || (creep.memory.status !== BUILDING && creep.store.getFreeCapacity() === 0)) {
       creep.memory.status = BUILDING;
-      creep.say("🏗️ upgrade");
+      creep.say(Status.Upgrade);
     }
 
     if (creep.memory.status !== WITHDRAW && creep.store[RESOURCE_ENERGY] === 0) {
       creep.memory.status = WITHDRAW;
-      creep.say("⚡ withdraw");
+      creep.say(Status.Withdraw);
     }
 
     if (creep.memory.status === BUILDING) {
       if (creep.upgradeController(this.target) === ERR_NOT_IN_RANGE) {
-        creep.moveTo(this.target, { visualizePathStyle: { stroke: "#ffffff" } });
+        creep.moveTo(this.target, Path.Default);
       }
     } else if (creep.memory.status === WITHDRAW) {
       if (creep.withdraw(this.source, RESOURCE_ENERGY) === ERR_NOT_IN_RANGE) {
-        creep.moveTo(this.source, { visualizePathStyle: { stroke: "#ffaa00" } });
+        creep.moveTo(this.source, Path.Energy);
       }
     }
 

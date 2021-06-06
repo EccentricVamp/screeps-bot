@@ -1,3 +1,4 @@
+import { Path, Status } from "Constants";
 import Task from "Tasks/Task";
 export default class Renew implements Task {
   private target: StructureSpawn;
@@ -15,12 +16,12 @@ export default class Renew implements Task {
 
     if (creep.memory.status !== RENEWING) {
       creep.memory.status = RENEWING;
-      creep.say("🔄 renew");
+      creep.say(Status.Renew);
     }
 
     const result = this.target.renewCreep(creep);
     if (result === ERR_NOT_IN_RANGE) {
-      creep.moveTo(this.target, { visualizePathStyle: { stroke: "#ffffff" } });
+      creep.moveTo(this.target, Path.Default);
     }
 
     return result === ERR_FULL;
