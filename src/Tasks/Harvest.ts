@@ -28,8 +28,8 @@ export default class Harvest implements Task {
   }
 
   public perform(creep: Creep): boolean {
-    const HARVESTING = 2;
     const TRANSFERING = 1;
+    const HARVESTING = 2;
 
     if (creep.memory.status === null || (creep.memory.status !== TRANSFERING && creep.store.getFreeCapacity() === 0)) {
       creep.memory.status = TRANSFERING;
