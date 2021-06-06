@@ -18,7 +18,7 @@ export default class Upgrade implements Task {
     const move = creep.getActiveBodyparts(MOVE);
     if (move === 0) return null;
 
-    return work;
+    return work + carry + move;
   }
 
   public perform(creep: Creep): boolean {
