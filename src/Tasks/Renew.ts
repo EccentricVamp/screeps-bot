@@ -26,7 +26,7 @@ export class Renew implements Task {
 
     const result = this.target.renewCreep(creep);
     if (result === ERR_NOT_IN_RANGE) {
-      creep.moveTo(this.target, Path.Default);
+      creep.moveTo(this.target, Path.Renew);
     }
 
     return result === ERR_FULL;
