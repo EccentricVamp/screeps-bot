@@ -1,11 +1,4 @@
-import Build from "Tasks/Build";
-import Harvest from "Tasks/Harvest";
-import Idle from "Tasks/Idle";
-import Recycle from "Tasks/Recycle";
-import Renew from "Tasks/Renew";
-import Task from "Tasks/Task";
-import Transport from "Tasks/Transport";
-import Upgrade from "Tasks/Upgrade";
+import { Build, Harvest, Idle, Recycle, Renew, Task, Transport, Upgrade } from "Tasks/All";
 import _ from "lodash";
 
 declare global {
@@ -113,11 +106,10 @@ export const loop = (): void => {
   for (const task of tasks) {
     let complete = false;
 
-    const eligableCreeps = _.filter(creeps, creep => task.interview(creep) !== null)
-    const sortedCreeps = _.sortBy(eligableCreeps, [creep => task.interview(creep)]);
-
+    const eligibleCreeps = _.filter(creeps, function(creep) { return task.interview(creep) !== null; });
+    const sortedCreeps = _.sortBy(eligibleCreeps, function(creep) { return task.interview(creep); });
     const bestCreep = _.last(sortedCreeps);
-    if (bestCreep === undefined) break;
+    if (bestCreep === undefined) continue;
 
     _.pull(creeps, bestCreep);
     complete = task.perform(bestCreep);
