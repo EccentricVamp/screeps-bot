@@ -37,7 +37,7 @@ export const loop = (): void => {
   const room = Object.values(Game.rooms)[0];
   const controller = room.controller;
   const spawn = room.find(FIND_MY_SPAWNS)[0];
-  const creeps = room.find(FIND_MY_CREEPS);
+  const creeps = room.find(FIND_MY_CREEPS, { filter: { spawning: false } });
   const sites = room.find(FIND_CONSTRUCTION_SITES);
   const energyStores = room.find(FIND_STRUCTURES, { filter: hasEnergy });
   const freeStores = room.find(FIND_STRUCTURES, { filter: hasFreeCapacity });
@@ -90,6 +90,8 @@ export const loop = (): void => {
       const store = energyStores[0];
       if (hasEnergy(store)) {
         const build = new Build(store, site);
+        tasks.push(build);
+        tasks.push(build);
         tasks.push(build);
       }
     }
