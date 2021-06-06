@@ -1,4 +1,13 @@
-import { Build, Harvest, Idle, Recycle, Renew, Repair, Task, Transport, Upgrade } from "Tasks/All";
+import { Build } from "Tasks/Build";
+import { Idle } from "Tasks/Idle";
+import { Harvest } from "Tasks/Harvest";
+import { Recycle } from "Tasks/Recycle";
+import { Renew } from "Tasks/Renew";
+import { Repair } from "Tasks/Repair";
+import { Task } from "Tasks/Task";
+import { Transport } from "Tasks/Transport";
+import { Upgrade } from "Tasks/Upgrade";
+import { hasCapacity, hasEnergy, needsEnergy, needsRepair } from "Filters";
 import _ from "lodash";
 
 declare global {
@@ -8,52 +17,25 @@ declare global {
 }
 
 export const loop = (): void => {
-  const STORES = [STRUCTURE_CONTAINER, STRUCTURE_STORAGE];
-  const NEEDS = [STRUCTURE_EXTENSION, STRUCTURE_SPAWN];
-
-  const RECYCLING = 98;
-  const RENEWING = 99;
-  const RENEW_THRESHOLD = 500;
-
-  function hasEnergy(structure: AnyStructure): structure is StructureContainer | StructureStorage {
-    return (
-      _.includes(STORES, structure.structureType) &&
-      (structure as StructureContainer | StructureStorage).store[RESOURCE_ENERGY] > 0
-    );
-  }
-
-  function hasFreeCapacity(structure: AnyStructure): structure is StructureContainer | StructureStorage {
-    return (
-      _.includes(STORES, structure.structureType) &&
-      (structure as StructureContainer | StructureStorage).store.getFreeCapacity(RESOURCE_ENERGY) > 0
-    );
-  }
-
-  function needsEnergy(structure: AnyStructure): structure is StructureExtension | StructureSpawn {
-    return (
-      _.includes(NEEDS, structure.structureType) &&
-      (structure as StructureExtension | StructureSpawn).store.getFreeCapacity(RESOURCE_ENERGY) > 0
-    );
-  }
-
-  function needsRepair(structure: AnyStructure) {
-    return structure.hits < structure.hitsMax;
-  }
-
   const tasks = new Array<Task>();
   const room = Object.values(Game.rooms)[0];
+  const spawns = room.find(FIND_MY_SPAWNS);
+  const spawn = spawns[0];
+  const creeps = room.find(FIND_MY_CREEPS);
   const controller = room.controller;
-  const spawn = room.find(FIND_MY_SPAWNS)[0];
-  const energyNeeds = room.find(FIND_MY_STRUCTURES, { filter: needsEnergy });
-  const creeps = room.find(FIND_MY_CREEPS, { filter: { spawning: false } });
+  const structures = room.find(FIND_STRUCTURES);
+
+  const energyNeeds = structures.filter(needsEnergy);
+  const energyStores = structures.filter(hasEnergy);
+  const energyCapacity = structures.filter(hasCapacity);
+
   const sites = room.find(FIND_CONSTRUCTION_SITES);
-  const energyStores = room.find(FIND_STRUCTURES, { filter: hasEnergy });
-  const freeStores = room.find(FIND_STRUCTURES, { filter: hasFreeCapacity });
-  const repairNeeds = room.find(FIND_STRUCTURES, { filter: needsRepair });
+
+  const repairs = structures.filter(needsRepair);
 
   const recycle = new Recycle(spawn);
   for (const creep of creeps) {
-    if (creep.memory.status === RECYCLING) {
+    if (creep.memory.status === Recycle.STATUS) {
       recycle.perform(creep);
       _.remove(creeps, creep);
     }
@@ -62,75 +44,55 @@ export const loop = (): void => {
   const renew = new Renew(spawn);
   for (const creep of creeps) {
     if (creep.ticksToLive === undefined) continue;
-    if (creep.ticksToLive < RENEW_THRESHOLD || creep.memory.status === RENEWING) {
+    if (creep.ticksToLive < Renew.THRESHOLD || creep.memory.status === Renew.STATUS) {
       const complete = renew.perform(creep);
       if (complete) creep.memory.status = null;
       else _.remove(creeps, creep);
     }
   }
 
-  if (energyNeeds.length > 0) {
+  if (energyStores.length > 0 && energyNeeds.length > 0) {
     const need = energyNeeds[0];
-    if (energyStores.length > 0 && needsEnergy(need)) {
-      const store = energyStores[0];
-      if (hasEnergy(store)) {
-        const transport = new Transport(RESOURCE_ENERGY, store, need);
-        tasks.push(transport);
-      }
-    }
+    const store = energyStores[0];
+    const transport = new Transport(RESOURCE_ENERGY, store, need);
+    tasks.push(transport);
   }
 
-  if (freeStores.length > 0) {
-    const store = freeStores[0];
-    const source = store.pos.findClosestByRange(FIND_SOURCES_ACTIVE);
-    if (source !== null && hasFreeCapacity(store)) {
-      const harvest = new Harvest(RESOURCE_ENERGY, source, store);
+  if (energyCapacity.length > 0) {
+    const target = energyCapacity[0];
+    const source = target.pos.findClosestByRange(FIND_SOURCES_ACTIVE);
+    if (source !== null) {
+      const harvest = new Harvest(RESOURCE_ENERGY, source, target);
       tasks.push(harvest);
     }
   }
 
-  if (energyStores.length > 0) {
+  if (energyStores.length > 0 && controller !== undefined) {
     const store = energyStores[0];
-    if (controller !== undefined && hasEnergy(store)) {
-      const upgrade = new Upgrade(store, controller);
-      tasks.push(upgrade);
-    }
+    const upgrade = new Upgrade(store, controller);
+    tasks.push(upgrade);
+    tasks.push(upgrade);
   }
 
-  if (sites.length > 0) {
+  if (energyStores.length > 0 && sites.length > 0) {
     const site = sites[0];
-    if (energyStores.length > 0) {
-      const store = energyStores[0];
-      if (hasEnergy(store)) {
-        const build = new Build(store, site);
-        tasks.push(build);
-      }
-    }
+    const store = energyStores[0];
+    const build = new Build(store, site);
+    tasks.push(build);
   }
 
-  if (repairNeeds.length > 0) {
-    const target = repairNeeds[0];
-    if (energyStores.length > 0) {
-      const store = energyStores[0];
-      if (hasEnergy(store)) {
-        const repair = new Repair(store, target);
-        tasks.push(repair);
-      }
-    }
+  if (energyStores.length > 0 && repairs.length > 0) {
+    const target = repairs[0];
+    const store = energyStores[0];
+    const repair = new Repair(store, target);
+    tasks.push(repair);
   }
 
   for (const task of tasks) {
-    function eligible(creep: Creep) {
-      return task.interview(creep) !== null;
-    }
-    function interview(creep: Creep) {
-      return task.interview(creep);
-    }
-
     let complete = false;
 
-    const eligibleCreeps = _.filter(creeps, eligible);
-    const sortedCreeps = _.sortBy(eligibleCreeps, interview);
+    const eligibleCreeps = creeps.filter(creep => task.eligible(creep));
+    const sortedCreeps = eligibleCreeps.sort((a, b) => task.interview(a) - task.interview(b));
     const bestCreep = _.last(sortedCreeps);
     if (bestCreep === undefined) continue;
 
