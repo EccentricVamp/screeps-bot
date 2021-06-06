@@ -118,6 +118,11 @@ export const loop = (): void => {
     }
   }
 
+  const idle = new Idle();
+  for (const creep of creeps) {
+    idle.perform(creep);
+  }
+
   for (const name in Memory.creeps) {
     if (!(name in Game.creeps)) {
       delete Memory.creeps[name];
