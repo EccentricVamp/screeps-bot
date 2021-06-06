@@ -1,4 +1,5 @@
-export default interface Task {
-  interview(creep: Creep): number | null;
+export interface Task {
+  eligible(creep: Creep): boolean;
+  interview(creep: Creep): number;
   perform(creep: Creep): boolean;
 }

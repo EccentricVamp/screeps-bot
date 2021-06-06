@@ -1,6 +1,6 @@
 import { Path, Status } from "Constants";
-import Task from "Tasks/Task";
-export default class Repair implements Task {
+import { Task } from "Tasks/Task";
+export class Repair implements Task {
   private source: StructureContainer | StructureStorage;
   private target: Structure;
 
@@ -9,16 +9,17 @@ export default class Repair implements Task {
     this.target = target;
   }
 
-  public interview(creep: Creep): number | null {
+  public eligible(creep: Creep): boolean {
     const work = creep.getActiveBodyparts(WORK);
-    if (work === 0) return null;
-
     const carry = creep.getActiveBodyparts(CARRY);
-    if (carry === 0) return null;
-
     const move = creep.getActiveBodyparts(MOVE);
-    if (move === 0) return null;
+    return work > 0 && carry > 0 && move > 0;
+  }
 
+  public interview(creep: Creep): number {
+    const work = creep.getActiveBodyparts(WORK);
+    const carry = creep.getActiveBodyparts(CARRY);
+    const move = creep.getActiveBodyparts(MOVE);
     return work + carry + move;
   }
 

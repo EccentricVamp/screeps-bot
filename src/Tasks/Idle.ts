@@ -1,7 +1,10 @@
 import { Path } from "Constants";
-import Task from "Tasks/Task";
-export default class Idle implements Task {
-  public interview(): number | null {
+import { Task } from "Tasks/Task";
+export class Idle implements Task {
+  public eligible(): boolean {
+    return true;
+  }
+  public interview(): number {
     return 1;
   }
   public perform(creep: Creep): boolean {

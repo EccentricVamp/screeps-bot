@@ -1,6 +1,6 @@
 import { Path, Status } from "Constants";
-import Task from "Tasks/Task";
-export default class Harvest implements Task {
+import { Task } from "Tasks/Task";
+export class Harvest implements Task {
   private resource: ResourceConstant;
   private source: Source | Mineral | Deposit;
   private target: StructureContainer | StructureExtension | StructureSpawn | StructureStorage;
@@ -15,16 +15,15 @@ export default class Harvest implements Task {
     this.target = target;
   }
 
-  public interview(creep: Creep): number | null {
+  public eligible(creep: Creep): boolean {
     const work = creep.getActiveBodyparts(WORK);
-    if (work === 0) return null;
-
     const carry = creep.getActiveBodyparts(CARRY);
-    if (carry === 0) return null;
-
     const move = creep.getActiveBodyparts(MOVE);
-    if (move === 0) return null;
+    return work > 0 && carry > 0 && move > 0;
+  }
 
+  public interview(creep: Creep): number {
+    const work = creep.getActiveBodyparts(WORK);
     return work;
   }
 

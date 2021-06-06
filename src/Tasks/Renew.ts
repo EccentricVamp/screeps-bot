@@ -1,21 +1,26 @@
 import { Path, Status } from "Constants";
-import Task from "Tasks/Task";
-export default class Renew implements Task {
+import { Task } from "Tasks/Task";
+export class Renew implements Task {
   private target: StructureSpawn;
+
+  public static STATUS = 99;
+  public static THRESHOLD = 500;
 
   public constructor(target: StructureSpawn) {
     this.target = target;
   }
 
-  public interview(): number | null {
-    return null;
+  public eligible(): boolean {
+    return true;
+  }
+
+  public interview(): number {
+    return 1;
   }
 
   public perform(creep: Creep): boolean {
-    const RENEWING = 99;
-
-    if (creep.memory.status !== RENEWING) {
-      creep.memory.status = RENEWING;
+    if (creep.memory.status !== Renew.STATUS) {
+      creep.memory.status = Renew.STATUS;
       creep.say(Status.Renew);
     }
 

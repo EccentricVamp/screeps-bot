@@ -1,21 +1,25 @@
 import { Path, Status } from "Constants";
-import Task from "Tasks/Task";
-export default class Recycle implements Task {
+import { Task } from "Tasks/Task";
+export class Recycle implements Task {
   private target: StructureSpawn;
+
+  public static STATUS = 98;
 
   public constructor(target: StructureSpawn) {
     this.target = target;
   }
 
-  public interview(): number | null {
-    return null;
+  public eligible(): boolean {
+    return true;
+  }
+
+  public interview(): number {
+    return 1;
   }
 
   public perform(creep: Creep): boolean {
-    const RECYCLING = 98;
-
-    if (creep.memory.status !== RECYCLING) {
-      creep.memory.status = RECYCLING;
+    if (creep.memory.status !== Recycle.STATUS) {
+      creep.memory.status = Recycle.STATUS;
       creep.say(Status.Recycle);
     }
 
