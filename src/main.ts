@@ -3,9 +3,8 @@ import Harvest from "Tasks/Harvest";
 import Renew from "Tasks/Renew";
 import Task from "Tasks/Task";
 import Transport from "Tasks/Transport";
-// import Upgrade from "Tasks/Upgrade";
-import _ from "lodash";
 import Upgrade from "Tasks/Upgrade";
+import _ from "lodash";
 
 declare global {
   interface CreepMemory {
@@ -15,6 +14,7 @@ declare global {
 
 export const loop = (): void => {
   const STORES = [STRUCTURE_CONTAINER, STRUCTURE_STORAGE];
+  const NEEDS = [STRUCTURE_EXTENSION, STRUCTURE_SPAWN];
 
   function hasEnergy(structure: AnyStructure): structure is StructureContainer | StructureStorage {
     return (
@@ -30,6 +30,13 @@ export const loop = (): void => {
     );
   }
 
+  function needsEnergy(structure: AnyStructure): structure is StructureExtension | StructureSpawn {
+    return (
+      _.includes(NEEDS, structure.structureType) &&
+      (structure as StructureExtension | StructureSpawn).store.getFreeCapacity(RESOURCE_ENERGY) > 0
+    );
+  }
+
   const RENEWING = 99;
   const RENEW_THRESHOLD = 500;
 
@@ -37,6 +44,7 @@ export const loop = (): void => {
   const room = Object.values(Game.rooms)[0];
   const controller = room.controller;
   const spawn = room.find(FIND_MY_SPAWNS)[0];
+  const energyNeeds = room.find(FIND_MY_STRUCTURES, { filter: needsEnergy });
   const creeps = room.find(FIND_MY_CREEPS, { filter: { spawning: false } });
   const sites = room.find(FIND_CONSTRUCTION_SITES);
   const energyStores = room.find(FIND_STRUCTURES, { filter: hasEnergy });
@@ -51,17 +59,18 @@ export const loop = (): void => {
     }
   }
 
-  if (spawn.store.getFreeCapacity(RESOURCE_ENERGY) > 0) {
-    if (energyStores.length > 0) {
+  if (energyNeeds.length > 0) {
+    const need = energyNeeds[0];
+    if (energyStores.length > 0 && needsEnergy(need)) {
       const store = energyStores[0];
       if (store !== null && hasEnergy(store)) {
-        const transport = new Transport(RESOURCE_ENERGY, store, spawn);
+        const transport = new Transport(RESOURCE_ENERGY, store, need);
         tasks.push(transport);
       }
     } else {
-      const source = spawn.pos.findClosestByRange(FIND_SOURCES_ACTIVE);
-      if (source !== null) {
-        const harvest = new Harvest(RESOURCE_ENERGY, source, spawn);
+      const source = need.pos.findClosestByRange(FIND_SOURCES_ACTIVE);
+      if (source !== null && needsEnergy(need)) {
+        const harvest = new Harvest(RESOURCE_ENERGY, source, need);
         tasks.push(harvest);
       }
     }

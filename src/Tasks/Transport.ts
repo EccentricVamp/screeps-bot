@@ -2,12 +2,12 @@ import Task from "Tasks/Task";
 export default class Transport implements Task {
   private resource: ResourceConstant;
   private source: StructureContainer | StructureStorage;
-  private target: StructureSpawn | StructureContainer | StructureStorage;
+  private target: StructureContainer | StructureExtension | StructureSpawn | StructureStorage;
 
   public constructor(
     resource: ResourceConstant,
     source: StructureContainer | StructureStorage,
-    target: StructureSpawn | StructureContainer | StructureStorage
+    target: StructureContainer | StructureExtension | StructureSpawn | StructureStorage
   ) {
     this.resource = resource;
     this.source = source;
@@ -45,7 +45,7 @@ export default class Transport implements Task {
       }
     }
 
-    if (this.target.structureType === STRUCTURE_SPAWN) {
+    if (this.target.structureType === STRUCTURE_SPAWN || this.target.structureType === STRUCTURE_EXTENSION) {
       return this.target.store.getFreeCapacity() === 0 || this.source.store[this.resource] === 0;
     } else {
       return this.target.store.getFreeCapacity() === 0 || this.source.store[this.resource] === 0;

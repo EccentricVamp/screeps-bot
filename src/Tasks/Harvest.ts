@@ -2,12 +2,12 @@ import Task from "Tasks/Task";
 export default class Harvest implements Task {
   private resource: ResourceConstant;
   private source: Source | Mineral | Deposit;
-  private target: StructureSpawn | StructureContainer | StructureStorage;
+  private target: StructureContainer | StructureExtension | StructureSpawn | StructureStorage;
 
   public constructor(
     resource: ResourceConstant,
     source: Source | Mineral | Deposit,
-    target: StructureSpawn | StructureContainer | StructureStorage
+    target: StructureContainer | StructureExtension | StructureSpawn | StructureStorage
   ) {
     this.resource = resource;
     this.source = source;
@@ -44,7 +44,7 @@ export default class Harvest implements Task {
       }
     }
 
-    if (this.target.structureType === STRUCTURE_SPAWN) {
+    if (this.target.structureType === STRUCTURE_SPAWN || this.target.structureType === STRUCTURE_EXTENSION) {
       return this.target.store.getFreeCapacity() === 0;
     } else {
       return this.target.store.getFreeCapacity() === 0;
