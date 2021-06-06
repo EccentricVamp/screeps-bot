@@ -1,5 +1,6 @@
 import Build from "Tasks/Build";
 import Harvest from "Tasks/Harvest";
+import Idle from "Tasks/Idle";
 import Renew from "Tasks/Renew";
 import Task from "Tasks/Task";
 import Transport from "Tasks/Transport";
@@ -67,12 +68,6 @@ export const loop = (): void => {
         const transport = new Transport(RESOURCE_ENERGY, store, need);
         tasks.push(transport);
       }
-    } else {
-      const source = need.pos.findClosestByRange(FIND_SOURCES_ACTIVE);
-      if (source !== null && needsEnergy(need)) {
-        const harvest = new Harvest(RESOURCE_ENERGY, source, need);
-        tasks.push(harvest);
-      }
     }
   }
 
@@ -100,8 +95,6 @@ export const loop = (): void => {
       if (hasEnergy(store)) {
         const build = new Build(store, site);
         tasks.push(build);
-        tasks.push(build);
-        tasks.push(build);
       }
     }
   }
@@ -119,6 +112,11 @@ export const loop = (): void => {
       creep.memory.status = null;
       creeps.push(creep);
     }
+  }
+
+  const idle = new Idle();
+  for (const creep of creeps) {
+    idle.perform(creep);
   }
 
   for (const name in Memory.creeps) {
