@@ -1,4 +1,4 @@
-import { Build, Harvest, Idle, Recycle, Renew, Task, Transport, Upgrade } from "Tasks/All";
+import { Build, Harvest, Idle, Recycle, Renew, Repair, Task, Transport, Upgrade } from "Tasks/All";
 import _ from "lodash";
 
 declare global {
@@ -36,6 +36,10 @@ export const loop = (): void => {
     );
   }
 
+  function needsRepair(structure: AnyStructure) {
+    return structure.hits < structure.hitsMax;
+  }
+
   const tasks = new Array<Task>();
   const room = Object.values(Game.rooms)[0];
   const controller = room.controller;
@@ -45,6 +49,7 @@ export const loop = (): void => {
   const sites = room.find(FIND_CONSTRUCTION_SITES);
   const energyStores = room.find(FIND_STRUCTURES, { filter: hasEnergy });
   const freeStores = room.find(FIND_STRUCTURES, { filter: hasFreeCapacity });
+  const repairNeeds = room.find(FIND_STRUCTURES, { filter: needsRepair });
 
   const recycle = new Recycle(spawn);
   for (const creep of creeps) {
@@ -103,11 +108,29 @@ export const loop = (): void => {
     }
   }
 
+  if (repairNeeds.length > 0) {
+    const target = repairNeeds[0];
+    if (energyStores.length > 0) {
+      const store = energyStores[0];
+      if (hasEnergy(store)) {
+        const repair = new Repair(store, target);
+        tasks.push(repair);
+      }
+    }
+  }
+
   for (const task of tasks) {
+    function eligible(creep: Creep) {
+      return task.interview(creep) !== null;
+    }
+    function interview(creep: Creep) {
+      return task.interview(creep);
+    }
+
     let complete = false;
 
-    const eligibleCreeps = _.filter(creeps, function(creep) { return task.interview(creep) !== null; });
-    const sortedCreeps = _.sortBy(eligibleCreeps, function(creep) { return task.interview(creep); });
+    const eligibleCreeps = _.filter(creeps, eligible);
+    const sortedCreeps = _.sortBy(eligibleCreeps, interview);
     const bestCreep = _.last(sortedCreeps);
     if (bestCreep === undefined) continue;
 
