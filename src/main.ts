@@ -37,7 +37,7 @@ export const loop = (): void => {
   for (const creep of creeps) {
     if (creep.memory.status === Recycle.STATUS) {
       recycle.perform(creep);
-      _.remove(creeps, creep);
+      _.pull(creeps, creep);
     }
   }
 
@@ -47,7 +47,7 @@ export const loop = (): void => {
     if (creep.ticksToLive < Renew.THRESHOLD || creep.memory.status === Renew.STATUS) {
       const complete = renew.perform(creep);
       if (complete) creep.memory.status = null;
-      else _.remove(creeps, creep);
+      else _.pull(creeps, creep);
     }
   }
 
@@ -93,14 +93,12 @@ export const loop = (): void => {
 
     const eligibleCreeps = creeps.filter(creep => task.eligible(creep));
     const sortedCreeps = eligibleCreeps.sort((a, b) => task.interview(a) - task.interview(b));
-    const bestCreep = _.last(sortedCreeps);
+    const bestCreep = sortedCreeps[sortedCreeps.length - 1];
     if (bestCreep === undefined) continue;
 
     _.pull(creeps, bestCreep);
     complete = task.perform(bestCreep);
-    if (complete) {
-      bestCreep.memory.status = null;
-    }
+    if (complete) bestCreep.memory.status = null;
   }
 
   const idle = new Idle();
