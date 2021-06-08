@@ -28,6 +28,9 @@ export class Recycle implements Task {
       creep.moveTo(this.target, Path.Recycle);
     }
 
-    return result === ERR_INVALID_TARGET;
+    if (result === ERR_INVALID_TARGET) {
+      creep.memory.status = null;
+      return true;
+    } else return false;
   }
 }

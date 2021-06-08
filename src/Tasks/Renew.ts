@@ -29,6 +29,9 @@ export class Renew implements Task {
       creep.moveTo(this.target, Path.Renew);
     }
 
-    return result === ERR_FULL;
+    if (result === ERR_FULL) {
+      creep.memory.status = null;
+      return true;
+    } else return false;
   }
 }
