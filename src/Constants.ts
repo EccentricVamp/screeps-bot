@@ -1,12 +1,14 @@
 export const enum Color {
   Blue = "#00aaff",
   Green = "#00ffaa",
+  Purple = "#aa00ff",
   Red = "#ff0000",
   White = "#ffffff",
   Yellow = "#ffaa00"
 }
 
 export class Path {
+  public static Claim = { visualizePathStyle: { stroke: Color.Purple } };
   public static Default = { visualizePathStyle: { stroke: Color.White } };
   public static Energy = { visualizePathStyle: { stroke: Color.Yellow } };
   public static Recycle = { visualizePathStyle: { stroke: Color.Red } };
@@ -16,6 +18,7 @@ export class Path {
 
 export const enum Status {
   Build = "🏗️ build",
+  Claim = "🚩 claim",
   Harvest = "⚒️ harvest",
   Recycle = "♻️ recycle",
   Renew = "🔄 renew",
