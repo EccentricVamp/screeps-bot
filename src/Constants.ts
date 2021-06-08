@@ -20,6 +20,7 @@ export const enum Status {
   Build = "🏗️ build",
   Claim = "🚩 claim",
   Harvest = "⚒️ harvest",
+  PickUp = "🧲 pick up",
   Recycle = "♻️ recycle",
   Renew = "🔄 renew",
   Repair = "🛠️ repair",
