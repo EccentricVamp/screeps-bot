@@ -16,7 +16,7 @@ export class Path {
   public static Idle = { visualizePathStyle: { stroke: Color.Blue } };
 }
 
-export const enum Status {
+export const enum Message {
   Build = "🏗️ build",
   Claim = "🚩 claim",
   Harvest = "⚒️ harvest",

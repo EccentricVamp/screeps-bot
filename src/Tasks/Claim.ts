@@ -1,4 +1,4 @@
-import { Path, Status } from "Constants";
+import { Path, Message } from "Constants";
 import { Task } from "Tasks/Task";
 export class Claim implements Task {
   private controller: StructureController;
@@ -24,7 +24,7 @@ export class Claim implements Task {
 
     if (creep.memory.status !== CLAIMING) {
       creep.memory.status = CLAIMING;
-      creep.say(Status.Claim);
+      creep.say(Message.Claim);
     }
 
     const result = creep.claimController(this.controller);

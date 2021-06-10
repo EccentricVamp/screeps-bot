@@ -1,4 +1,4 @@
-import { Path, Status } from "Constants";
+import { Path, Message } from "Constants";
 import { Task } from "Tasks/Task";
 export class Renew implements Task {
   private spawn: StructureSpawn;
@@ -21,7 +21,7 @@ export class Renew implements Task {
   public perform(creep: Creep): boolean {
     if (creep.memory.status !== Renew.STATUS) {
       creep.memory.status = Renew.STATUS;
-      creep.say(Status.Renew);
+      creep.say(Message.Renew);
     }
 
     const result = this.spawn.renewCreep(creep);

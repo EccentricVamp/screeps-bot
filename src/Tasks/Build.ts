@@ -1,4 +1,4 @@
-import { Path, Status } from "Constants";
+import { Path, Message } from "Constants";
 import { Task } from "Tasks/Task";
 export class Build implements Task {
   private store: StructureContainer | StructureStorage;
@@ -29,12 +29,12 @@ export class Build implements Task {
 
     if (creep.memory.status === null || (creep.memory.status !== BUILDING && creep.store.getFreeCapacity() === 0)) {
       creep.memory.status = BUILDING;
-      creep.say(Status.Build);
+      creep.say(Message.Build);
     }
 
     if (creep.memory.status !== WITHDRAW && creep.store[RESOURCE_ENERGY] === 0) {
       creep.memory.status = WITHDRAW;
-      creep.say(Status.Withdraw);
+      creep.say(Message.Withdraw);
     }
 
     if (creep.memory.status === BUILDING) {

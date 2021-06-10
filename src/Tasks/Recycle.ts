@@ -1,4 +1,4 @@
-import { Path, Status } from "Constants";
+import { Path, Message } from "Constants";
 import { Task } from "Tasks/Task";
 export class Recycle implements Task {
   private spawn: StructureSpawn;
@@ -20,7 +20,7 @@ export class Recycle implements Task {
   public perform(creep: Creep): boolean {
     if (creep.memory.status !== Recycle.STATUS) {
       creep.memory.status = Recycle.STATUS;
-      creep.say(Status.Recycle);
+      creep.say(Message.Recycle);
     }
 
     const result = this.spawn.recycleCreep(creep);

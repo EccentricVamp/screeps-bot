@@ -1,4 +1,4 @@
-import { Path, Status } from "Constants";
+import { Path, Message } from "Constants";
 import { Task } from "Tasks/Task";
 export class Collect implements Task {
   private resource: Resource<ResourceConstant>;
@@ -30,12 +30,12 @@ export class Collect implements Task {
 
     if (creep.memory.status === null || (creep.memory.status !== TRANSFERING && creep.store.getFreeCapacity() === 0)) {
       creep.memory.status = TRANSFERING;
-      creep.say(Status.Transfer);
+      creep.say(Message.Transfer);
     }
 
     if (creep.memory.status !== PICKINGUP && creep.store[this.resource.resourceType] === 0) {
       creep.memory.status = PICKINGUP;
-      creep.say(Status.Harvest);
+      creep.say(Message.Harvest);
     }
 
     if (creep.memory.status === TRANSFERING) {

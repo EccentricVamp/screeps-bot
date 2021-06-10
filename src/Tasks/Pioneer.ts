@@ -1,4 +1,4 @@
-import { Path, Status } from "Constants";
+import { Path, Message } from "Constants";
 import { Task } from "Tasks/Task";
 export class Pioneer implements Task {
   private source: Source;
@@ -29,12 +29,12 @@ export class Pioneer implements Task {
 
     if (creep.memory.status === null || (creep.memory.status !== BUILDING && creep.store.getFreeCapacity() === 0)) {
       creep.memory.status = BUILDING;
-      creep.say(Status.Build);
+      creep.say(Message.Build);
     }
 
     if (creep.memory.status !== HARVESTING && creep.store[RESOURCE_ENERGY] === 0) {
       creep.memory.status = HARVESTING;
-      creep.say(Status.Harvest);
+      creep.say(Message.Harvest);
     }
 
     if (creep.memory.status === BUILDING) {

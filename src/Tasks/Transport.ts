@@ -1,4 +1,4 @@
-import { Path, Status } from "Constants";
+import { Path, Message } from "Constants";
 import { Task } from "Tasks/Task";
 export class Transport implements Task {
   private resource: ResourceConstant;
@@ -33,12 +33,12 @@ export class Transport implements Task {
 
     if (creep.memory.status === null || (creep.memory.status !== TRANSFER && creep.store.getFreeCapacity() === 0)) {
       creep.memory.status = TRANSFER;
-      creep.say(Status.Transfer);
+      creep.say(Message.Transfer);
     }
 
     if (creep.memory.status !== WITHDRAW && creep.store[this.resource] === 0) {
       creep.memory.status = WITHDRAW;
-      creep.say(Status.Withdraw);
+      creep.say(Message.Withdraw);
     }
 
     if (creep.memory.status === TRANSFER) {
