@@ -1,12 +1,12 @@
 import { Path, Status } from "Constants";
 import { Task } from "Tasks/Task";
 export class Upgrade implements Task {
-  private source: StructureContainer | StructureStorage;
-  private target: StructureController;
+  private store: StructureContainer | StructureStorage;
+  private controller: StructureController;
 
-  public constructor(source: StructureContainer | StructureStorage, target: StructureController) {
-    this.source = source;
-    this.target = target;
+  public constructor(store: StructureContainer | StructureStorage, controller: StructureController) {
+    this.store = store;
+    this.controller = controller;
   }
 
   public eligible(creep: Creep): boolean {
@@ -38,15 +38,15 @@ export class Upgrade implements Task {
     }
 
     if (creep.memory.status === BUILDING) {
-      if (creep.upgradeController(this.target) === ERR_NOT_IN_RANGE) {
-        creep.moveTo(this.target, Path.Default);
+      if (creep.upgradeController(this.controller) === ERR_NOT_IN_RANGE) {
+        creep.moveTo(this.controller, Path.Default);
       }
     } else if (creep.memory.status === WITHDRAW) {
-      if (creep.withdraw(this.source, RESOURCE_ENERGY) === ERR_NOT_IN_RANGE) {
-        creep.moveTo(this.source, Path.Energy);
+      if (creep.withdraw(this.store, RESOURCE_ENERGY) === ERR_NOT_IN_RANGE) {
+        creep.moveTo(this.store, Path.Energy);
       }
     }
 
-    return this.target.progress === this.target.progressTotal;
+    return this.controller.progress === this.controller.progressTotal;
   }
 }

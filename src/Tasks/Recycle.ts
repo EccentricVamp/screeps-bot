@@ -1,12 +1,12 @@
 import { Path, Status } from "Constants";
 import { Task } from "Tasks/Task";
 export class Recycle implements Task {
-  private target: StructureSpawn;
+  private spawn: StructureSpawn;
 
   public static STATUS = 98;
 
-  public constructor(target: StructureSpawn) {
-    this.target = target;
+  public constructor(spawn: StructureSpawn) {
+    this.spawn = spawn;
   }
 
   public eligible(): boolean {
@@ -23,9 +23,9 @@ export class Recycle implements Task {
       creep.say(Status.Recycle);
     }
 
-    const result = this.target.recycleCreep(creep);
+    const result = this.spawn.recycleCreep(creep);
     if (result === ERR_NOT_IN_RANGE) {
-      creep.moveTo(this.target, Path.Recycle);
+      creep.moveTo(this.spawn, Path.Recycle);
     }
 
     if (result === ERR_INVALID_TARGET) {

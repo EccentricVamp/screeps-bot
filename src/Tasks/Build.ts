@@ -1,12 +1,12 @@
 import { Path, Status } from "Constants";
 import { Task } from "Tasks/Task";
 export class Build implements Task {
-  private source: StructureContainer | StructureStorage;
-  private target: ConstructionSite;
+  private store: StructureContainer | StructureStorage;
+  private site: ConstructionSite;
 
-  public constructor(source: StructureContainer | StructureStorage, target: ConstructionSite) {
-    this.source = source;
-    this.target = target;
+  public constructor(store: StructureContainer | StructureStorage, site: ConstructionSite) {
+    this.store = store;
+    this.site = site;
   }
 
   public eligible(creep: Creep): boolean {
@@ -38,17 +38,15 @@ export class Build implements Task {
     }
 
     if (creep.memory.status === BUILDING) {
-      if (creep.pos.inRangeTo(this.target.pos, 3)) {
-        creep.build(this.target);
-      } else {
-        creep.moveTo(this.target, Path.Default);
+      if (creep.build(this.site) === ERR_NOT_IN_RANGE) {
+        creep.moveTo(this.site, Path.Default);
       }
     } else if (creep.memory.status === WITHDRAW) {
-      if (creep.withdraw(this.source, RESOURCE_ENERGY) === ERR_NOT_IN_RANGE) {
-        creep.moveTo(this.source, Path.Energy);
+      if (creep.withdraw(this.store, RESOURCE_ENERGY) === ERR_NOT_IN_RANGE) {
+        creep.moveTo(this.store, Path.Energy);
       }
     }
 
-    return this.target.progress === this.target.progressTotal;
+    return this.site.progress === this.site.progressTotal;
   }
 }

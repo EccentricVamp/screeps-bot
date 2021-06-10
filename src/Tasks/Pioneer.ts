@@ -2,11 +2,11 @@ import { Path, Status } from "Constants";
 import { Task } from "Tasks/Task";
 export class Pioneer implements Task {
   private source: Source;
-  private target: ConstructionSite;
+  private site: ConstructionSite;
 
-  public constructor(source: Source, target: ConstructionSite) {
+  public constructor(source: Source, site: ConstructionSite) {
     this.source = source;
-    this.target = target;
+    this.site = site;
   }
 
   public eligible(creep: Creep): boolean {
@@ -38,10 +38,8 @@ export class Pioneer implements Task {
     }
 
     if (creep.memory.status === BUILDING) {
-      if (creep.pos.inRangeTo(this.target.pos, 3)) {
-        creep.build(this.target);
-      } else {
-        creep.moveTo(this.target, Path.Default);
+      if (creep.build(this.site) === ERR_NOT_IN_RANGE) {
+        creep.moveTo(this.site, Path.Default);
       }
     } else if (creep.memory.status === HARVESTING) {
       if (creep.harvest(this.source) === ERR_NOT_IN_RANGE) {
@@ -49,6 +47,6 @@ export class Pioneer implements Task {
       }
     }
 
-    return this.target.progress === this.target.progressTotal;
+    return this.site.progress === this.site.progressTotal;
   }
 }

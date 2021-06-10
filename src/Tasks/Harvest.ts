@@ -23,8 +23,7 @@ export class Harvest implements Task {
   }
 
   public interview(creep: Creep): number {
-    const work = creep.getActiveBodyparts(WORK);
-    return work;
+    return creep.getActiveBodyparts(WORK);
   }
 
   public perform(creep: Creep): boolean {

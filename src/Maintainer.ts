@@ -108,7 +108,7 @@ export class Maintainer {
   }
 
   private static push(count: number, task: Task, tasks: Task[]) {
-    for(let i = 0; i < count; i++) {
+    for (let i = 0; i < count; i++) {
       tasks.push(task);
     }
   }

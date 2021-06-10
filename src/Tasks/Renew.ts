@@ -1,13 +1,13 @@
 import { Path, Status } from "Constants";
 import { Task } from "Tasks/Task";
 export class Renew implements Task {
-  private target: StructureSpawn;
+  private spawn: StructureSpawn;
 
   public static STATUS = 99;
   public static THRESHOLD = 500;
 
-  public constructor(target: StructureSpawn) {
-    this.target = target;
+  public constructor(spawn: StructureSpawn) {
+    this.spawn = spawn;
   }
 
   public eligible(): boolean {
@@ -24,9 +24,9 @@ export class Renew implements Task {
       creep.say(Status.Renew);
     }
 
-    const result = this.target.renewCreep(creep);
+    const result = this.spawn.renewCreep(creep);
     if (result === ERR_NOT_IN_RANGE) {
-      creep.moveTo(this.target, Path.Renew);
+      creep.moveTo(this.spawn, Path.Renew);
     }
 
     if (result === ERR_FULL) {

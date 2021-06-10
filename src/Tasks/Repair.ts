@@ -1,12 +1,12 @@
 import { Path, Status } from "Constants";
 import { Task } from "Tasks/Task";
 export class Repair implements Task {
-  private source: StructureContainer | StructureStorage;
-  private target: Structure;
+  private store: StructureContainer | StructureStorage;
+  private structure: Structure;
 
-  public constructor(source: StructureContainer | StructureStorage, target: Structure) {
-    this.source = source;
-    this.target = target;
+  public constructor(store: StructureContainer | StructureStorage, structure: Structure) {
+    this.store = store;
+    this.structure = structure;
   }
 
   public eligible(creep: Creep): boolean {
@@ -38,17 +38,15 @@ export class Repair implements Task {
     }
 
     if (creep.memory.status === REPAIRING) {
-      if (creep.pos.inRangeTo(this.target.pos, 3)) {
-        creep.repair(this.target);
-      } else {
-        creep.moveTo(this.target, Path.Default);
+      if (creep.repair(this.structure) === ERR_NOT_IN_RANGE) {
+        creep.moveTo(this.structure, Path.Default);
       }
     } else if (creep.memory.status === WITHDRAW) {
-      if (creep.withdraw(this.source, RESOURCE_ENERGY) === ERR_NOT_IN_RANGE) {
-        creep.moveTo(this.source, Path.Energy);
+      if (creep.withdraw(this.store, RESOURCE_ENERGY) === ERR_NOT_IN_RANGE) {
+        creep.moveTo(this.store, Path.Energy);
       }
     }
 
-    return this.target.hits === this.target.hitsMax;
+    return this.structure.hits === this.structure.hitsMax;
   }
 }

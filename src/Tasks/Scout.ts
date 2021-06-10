@@ -1,4 +1,4 @@
-import { Path, Status } from "Constants";
+import { Path } from "Constants";
 import { Task } from "Tasks/Task";
 export class Scout implements Task {
   private position: RoomPosition;
@@ -20,15 +20,7 @@ export class Scout implements Task {
   }
 
   public perform(creep: Creep): boolean {
-    const CLAIMING = 1;
-
-    if (creep.memory.status !== CLAIMING) {
-      creep.memory.status = CLAIMING;
-      creep.say(Status.Claim);
-    }
-
     creep.moveTo(this.position, Path.Default);
-
     return false;
   }
 }
