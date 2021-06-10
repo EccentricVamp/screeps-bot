@@ -22,7 +22,7 @@ export const enum Status {
   Harvest = "⚒️ harvest",
   PickUp = "🧲 pick up",
   Recycle = "♻️ recycle",
-  Renew = "🔄 renew",
+  Renew = "↻ renew",
   Repair = "🛠️ repair",
   Transfer = "⇪ transfer",
   Upgrade = "🏗️ upgrade",
