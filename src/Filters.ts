@@ -5,21 +5,21 @@ export function isEnergy(resource: Resource): resource is Resource<RESOURCE_ENER
 export function hasEnergy(structure: AnyStructure): structure is StructureContainer | StructureStorage {
   return (
     (structure.structureType === STRUCTURE_CONTAINER || structure.structureType === STRUCTURE_STORAGE) &&
-    (structure as StructureContainer | StructureStorage).store[RESOURCE_ENERGY] > 0
+    structure.store[RESOURCE_ENERGY] > 0
   );
 }
 
 export function hasCapacity(structure: AnyStructure): structure is StructureContainer | StructureStorage {
   return (
-    (structure.structureType === STRUCTURE_CONTAINER || structure.structureType === STRUCTURE_EXTENSION) &&
-    (structure as StructureContainer | StructureStorage).store.getFreeCapacity(RESOURCE_ENERGY) > 0
+    (structure.structureType === STRUCTURE_CONTAINER || structure.structureType === STRUCTURE_STORAGE) &&
+    structure.store.getFreeCapacity() > 0
   );
 }
 
 export function needsEnergy(structure: AnyStructure): structure is StructureExtension | StructureSpawn {
   return (
     (structure.structureType === STRUCTURE_EXTENSION || structure.structureType === STRUCTURE_SPAWN) &&
-    (structure as StructureExtension | StructureSpawn).store.getFreeCapacity(RESOURCE_ENERGY) > 0
+    structure.store.getFreeCapacity(RESOURCE_ENERGY) > 0
   );
 }
 
