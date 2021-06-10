@@ -1,10 +1,10 @@
 import { Path, Status } from "Constants";
 import { Task } from "Tasks/Task";
 export class Claim implements Task {
-  private target: StructureController;
+  private controller: StructureController;
 
-  public constructor(target: StructureController) {
-    this.target = target;
+  public constructor(controller: StructureController) {
+    this.controller = controller;
   }
 
   public eligible(creep: Creep): boolean {
@@ -27,9 +27,9 @@ export class Claim implements Task {
       creep.say(Status.Claim);
     }
 
-    const result = creep.claimController(this.target);
+    const result = creep.claimController(this.controller);
     if (result === ERR_NOT_IN_RANGE) {
-      creep.moveTo(this.target, Path.Recycle);
+      creep.moveTo(this.controller, Path.Claim);
     }
 
     return result === ERR_INVALID_TARGET;
