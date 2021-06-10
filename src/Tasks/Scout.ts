@@ -27,7 +27,7 @@ export class Scout implements Task {
       creep.say(Status.Claim);
     }
 
-    creep.moveTo(this.position);
+    creep.moveTo(this.position, Path.Default);
 
     return false;
   }
