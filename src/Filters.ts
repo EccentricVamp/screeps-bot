@@ -1,3 +1,7 @@
+export function isEnergy(resource: Resource): resource is Resource<RESOURCE_ENERGY> {
+  return resource.resourceType === RESOURCE_ENERGY && resource.amount > 100;
+}
+
 export function hasEnergy(structure: AnyStructure): structure is StructureContainer | StructureStorage {
   return (
     (structure.structureType === STRUCTURE_CONTAINER || structure.structureType === STRUCTURE_STORAGE) &&
