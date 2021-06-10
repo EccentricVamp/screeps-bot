@@ -107,6 +107,12 @@ export class Maintainer {
     }
   }
 
+  private static push(count: number, task: Task, tasks: Task[]) {
+    for(let i = 0; i < count; i++) {
+      tasks.push(task);
+    }
+  }
+
   private static recycle(creeps: Creep[], spawn: StructureSpawn) {
     const recycle = new Recycle(spawn);
     for (const creep of creeps) {
