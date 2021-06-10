@@ -1,5 +1,6 @@
-import { hasCapacity, hasEnergy, needsEnergy, needsRepair } from "Filters";
+import { hasCapacity, hasEnergy, isEnergy, needsEnergy, needsRepair } from "Filters";
 import { Build } from "Tasks/Build";
+import { Claim } from "Tasks/Claim";
 import { Collect } from "Tasks/Collect";
 import { Harvest } from "Tasks/Harvest";
 import { Idle } from "Tasks/Idle";
@@ -17,6 +18,8 @@ export class Maintainer {
     const spawns = room.find(FIND_MY_SPAWNS);
     const creeps = room.find(FIND_MY_CREEPS);
     const structures = room.find(FIND_STRUCTURES);
+    const resources = room.find(FIND_DROPPED_RESOURCES);
+    const controller = room.controller;
 
     if (spawns.length > 0) {
       const spawn = spawns[0];
@@ -24,11 +27,14 @@ export class Maintainer {
       Maintainer.renew(creeps, spawn);
     }
 
+    if (controller !== undefined && !controller.my) {
+      const claim = new Claim(controller);
+      tasks.push(claim);
+    }
+
     const energyNeeds = structures.filter(needsEnergy);
     const energyStores = structures.filter(hasEnergy);
-    const energyResources = room.find(FIND_DROPPED_RESOURCES, {
-      filter: resource => resource.resourceType === RESOURCE_ENERGY && resource.amount > 100
-    });
+    const energyResources = resources.filter(isEnergy);
     if (energyNeeds.length > 0) {
       const need = energyNeeds[0];
       if (energyResources.length > 0) {
@@ -57,8 +63,8 @@ export class Maintainer {
       const sites = room.find(FIND_CONSTRUCTION_SITES);
       const repairs = structures.filter(needsRepair);
 
-      if (room.controller !== undefined) {
-        const upgrade = new Upgrade(store, room.controller);
+      if (controller !== undefined) {
+        const upgrade = new Upgrade(store, controller);
         tasks.push(upgrade);
       }
 
@@ -78,15 +84,23 @@ export class Maintainer {
     for (const task of tasks) {
       if (creeps.length === 0) break;
 
-      const eligibles = creeps.filter(creep => task.eligible(creep));
-      const interviews = eligibles.sort((a, b) => task.interview(a) - task.interview(b));
-      const bestCreep = interviews[interviews.length - 1];
-      if (bestCreep === undefined) continue;
+      const creep = Maintainer.evaluate(creeps, task);
+      if (creep === undefined) continue;
 
-      _.pull(creeps, bestCreep);
-      task.perform(bestCreep);
+      _.pull(creeps, creep);
+      task.perform(creep);
     }
 
+    Maintainer.idle(creeps);
+  }
+
+  private static evaluate(creeps: Creep[], task: Task): Creep | undefined {
+    const eligibles = creeps.filter(creep => task.eligible(creep));
+    const interviews = eligibles.sort((a, b) => task.interview(a) - task.interview(b));
+    return interviews[interviews.length - 1];
+  }
+
+  private static idle(creeps: Creep[]) {
     const idle = new Idle();
     for (const creep of creeps) {
       idle.perform(creep);
@@ -106,7 +120,11 @@ export class Maintainer {
   private static renew(creeps: Creep[], spawn: StructureSpawn) {
     const renew = new Renew(spawn);
     for (const creep of creeps) {
+      // Ignore creeps with CLAIM parts
+      if (creep.body.some(part => part.type === CLAIM)) continue;
+      // Ignore spawning creeps
       if (creep.ticksToLive === undefined) continue;
+
       if (creep.ticksToLive < Renew.THRESHOLD || creep.memory.status === Renew.STATUS) {
         const complete = renew.perform(creep);
         if (complete) creep.memory.status = null;
