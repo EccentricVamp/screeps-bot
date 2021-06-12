@@ -1,18 +1,10 @@
 "use strict";
 
-import clear from 'rollup-plugin-clear';
-import resolve from '@rollup/plugin-node-resolve';
-import commonjs from '@rollup/plugin-commonjs';
-import typescript from 'rollup-plugin-typescript2';
+import del from 'rollup-plugin-delete';
+import typescript from '@rollup/plugin-typescript';
 import screeps from 'rollup-plugin-screeps';
 
-let configuration;
-const dest = process.env.DEST;
-if (!dest) {
-  console.log("No destination specified - code will be compiled but not uploaded.");
-} else if ((configuration = require("./screeps.json")[dest]) == null) {
-  throw new Error("Invalid upload destination.");
-}
+const publish = process.env.publish ?? false;
 
 export default {
   input: "src/main.ts",
@@ -24,10 +16,8 @@ export default {
   external: ["lodash"],
 
   plugins: [
-    clear({ targets: ["dist"] }),
-    resolve({ rootDir: "src" }),
-    commonjs(),
+    del({ targets: "dist/*" }),
     typescript({ tsconfig: "./tsconfig.json" }),
-    screeps({ config: configuration, dryRun: configuration == null })
+    screeps({ config: "./screeps.json", dryRun: !publish })
   ]
 }

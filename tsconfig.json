@@ -11,6 +11,7 @@
     "allowUnreachableCode": false,
     "experimentalDecorators": true,
     "outDir": "dist",
+    "rootDir": "src",
     "baseUrl": "src/",
   },
   "exclude": [
