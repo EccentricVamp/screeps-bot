@@ -14,7 +14,6 @@ import _ from "lodash";
 
 export class Maintainer {
   public static maintain(room: Room): void {
-    const tasks = new Array<Task>();
     const spawns = room.find(FIND_MY_SPAWNS);
     const creeps = room.find(FIND_MY_CREEPS);
     const structures = room.find(FIND_STRUCTURES);
@@ -26,6 +25,8 @@ export class Maintainer {
       Maintainer.recycle(creeps, spawn);
       Maintainer.renew(creeps, spawn);
     }
+
+    const tasks = new Array<Task>();
 
     if (controller !== undefined && !controller.my) {
       const claim = new Claim(controller);
@@ -60,20 +61,20 @@ export class Maintainer {
 
     if (energyStores.length > 0) {
       const store = energyStores.pop() ?? energyStores[0];
-      const sites = room.find(FIND_CONSTRUCTION_SITES);
-      const repairs = structures.filter(needsRepair);
 
       if (controller !== undefined) {
         const upgrade = new Upgrade(store, controller);
         tasks.push(upgrade);
       }
 
+      const sites = room.find(FIND_CONSTRUCTION_SITES);
       if (sites.length > 0) {
         const site = sites.pop() ?? sites[0];
         const build = new Build(store, site);
         tasks.push(build);
       }
 
+      const repairs = structures.filter(needsRepair);
       if (repairs.length > 0) {
         const repair = repairs.pop() ?? repairs[0];
         const repairTask = new Repair(store, repair);
