@@ -1,4 +1,4 @@
-import { Path, Message } from "Constants";
+import { Message, Path } from "Constants";
 import { Task } from "Tasks/Task";
 export class Collect implements Task {
   private resource: Resource<ResourceConstant>;
