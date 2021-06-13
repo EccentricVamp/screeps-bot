@@ -1,7 +1,9 @@
 import { Acquire } from "./Acquire";
 
-export default class Pickup extends Acquire<Resource> {
-  public execute(creep: Creep): CreepActionReturnCode | ERR_FULL {
-    return creep.pickup(this.acquisition);
+export type PickupReturnCode = CreepActionReturnCode | ERR_FULL;
+
+export class Pickup extends Acquire<Resource> {
+  public execute(creep: Creep): PickupReturnCode {
+    return creep.pickup(this.target);
   }
 }

@@ -1,14 +1,16 @@
 import { Acquire } from "./Acquire";
 
-export default class Withdraw extends Acquire<Structure | Tombstone | Ruin> {
+export type Withdrawable = Structure | Tombstone | Ruin;
+
+export class Withdraw extends Acquire<Withdrawable> {
   protected resource: ResourceConstant;
 
-  public constructor(acquisition: Structure | Tombstone | Ruin, resource: ResourceConstant) {
-    super(acquisition);
+  public constructor(target: Withdrawable, resource: ResourceConstant) {
+    super(target);
     this.resource = resource;
   }
 
-  public execute(creep: Creep): ScreepsReturnCode  {
-    return creep.withdraw(this.acquisition, this.resource);
+  public execute(creep: Creep): ScreepsReturnCode {
+    return creep.withdraw(this.target, this.resource);
   }
 }

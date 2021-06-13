@@ -1,21 +1,14 @@
-import Action from "./Action";
+import { Action } from "./Action";
+import { Harvestable } from "./Harvest";
+import { Withdrawable } from "./Withdraw";
 
-export type ResourceAcquisition = Structure | Tombstone | Ruin | Source | Mineral | Deposit | Resource;
+export type Acquireable = Harvestable | Resource | Withdrawable;
 
-export abstract class Acquire<Acquisition extends ResourceAcquisition> implements Action {
-  protected acquisition: Acquisition;
-
-  public parts: Set<BodyPartConstant>;
-  public resources: Set<ResourceConstant>;
-
-  public constructor(acquisition: Acquisition) {
-    this.acquisition = acquisition;
-    this.parts = new Set([CARRY, MOVE]);
-    this.resources = new Set();
+export abstract class Acquire<Acquisition extends Acquireable> extends Action<Acquisition> {
+  protected constructor(target: Acquisition) {
+    super(target);
+    this.parts.add(CARRY).add(MOVE);
   }
 
   public abstract execute(creep: Creep): ScreepsReturnCode;
-  public move(creep: Creep): CreepMoveReturnCode | ERR_NO_PATH | ERR_INVALID_TARGET | ERR_NOT_FOUND  {
-    return creep.moveTo(this.acquisition);
-  }
 }
