@@ -21,36 +21,22 @@ module.exports = {
   },
   plugins: ["@typescript-eslint", "import"],
   settings: {
-    "import/parsers": {
-      "@typescript-eslint/parser": [".ts", ".tsx"]
-    },
-    "import/resolver": {
-      typescript: {}
-    }
+    "import/parsers": { "@typescript-eslint/parser": [".ts", ".tsx"] },
+    "import/resolver": { typescript: {} }
   },
   rules: {
     "@typescript-eslint/array-type": "error",
     "@typescript-eslint/consistent-type-assertions": "error",
     "@typescript-eslint/consistent-type-definitions": "error",
     "@typescript-eslint/explicit-function-return-type": "off",
-    "@typescript-eslint/explicit-member-accessibility": [
-      "error",
-      {
-        accessibility: "explicit"
-      }
-    ],
+    "@typescript-eslint/explicit-member-accessibility": ["error", { accessibility: "explicit" } ],
     "@typescript-eslint/no-explicit-any": "off",
     "@typescript-eslint/no-parameter-properties": "off",
     "@typescript-eslint/no-unused-expressions": "error",
     "@typescript-eslint/no-use-before-define": ["error", { functions: false }],
     "@typescript-eslint/prefer-for-of": "error",
     "@typescript-eslint/space-within-parens": ["off", "never"],
-    "@typescript-eslint/unbound-method": [
-      "error",
-      {
-        "ignoreStatic": true
-      }
-    ],
+    "@typescript-eslint/unbound-method": ["error", { ignoreStatic: true }],
     "@typescript-eslint/unified-signatures": "error",
     "arrow-parens": ["off", "as-needed"],
     camelcase: "error",
@@ -73,12 +59,7 @@ module.exports = {
     "no-invalid-this": "off",
     "no-multiple-empty-lines": "off",
     "no-new-wrappers": "error",
-    "no-shadow": [
-      "error",
-      {
-        hoist: "all"
-      }
-    ],
+    "no-shadow": ["error", { hoist: "all" }],
     "no-throw-literal": "error",
     "no-trailing-spaces": "off",
     "no-undef-init": "error",
