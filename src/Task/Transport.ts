@@ -1,5 +1,5 @@
 import { Message, Path } from "Constants";
-import { Task } from "Tasks/Task";
+import { Task } from "./Task";
 export class Transport implements Task {
   private resource: ResourceConstant;
   private source: StructureContainer | StructureStorage;

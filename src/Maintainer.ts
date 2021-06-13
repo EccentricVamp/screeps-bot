@@ -1,15 +1,15 @@
 import { hasCapacity, hasEnergy, isEnergy, needsEnergy, needsRepair } from "Filters";
-import { Build } from "Tasks/Build";
-import { Claim } from "Tasks/Claim";
-import { Collect } from "Tasks/Collect";
-import { Harvest } from "Tasks/Harvest";
-import { Idle } from "Tasks/Idle";
-import { Recycle } from "Tasks/Recycle";
-import { Renew } from "Tasks/Renew";
-import { Repair } from "Tasks/Repair";
-import { Task } from "Tasks/Task";
-import { Transport } from "Tasks/Transport";
-import { Upgrade } from "Tasks/Upgrade";
+import { Build } from "Task/Build";
+import { Claim } from "Task/Claim";
+import { Collect } from "Task/Collect";
+import { Harvest } from "Task/Harvest";
+import { Idle } from "Task/Idle";
+import { Recycle } from "Task/Recycle";
+import { Renew } from "Task/Renew";
+import { Repair } from "Task/Repair";
+import { Task } from "Task/Task";
+import { Transport } from "Task/Transport";
+import { Upgrade } from "Task/Upgrade";
 import _ from "lodash";
 
 export class Maintainer {

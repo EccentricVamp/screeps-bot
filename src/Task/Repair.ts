@@ -1,12 +1,12 @@
 import { Message, Path } from "Constants";
-import { Task } from "Tasks/Task";
-export class Upgrade implements Task {
+import { Task } from "./Task";
+export class Repair implements Task {
   private store: StructureContainer | StructureStorage;
-  private controller: StructureController;
+  private structure: Structure;
 
-  public constructor(store: StructureContainer | StructureStorage, controller: StructureController) {
+  public constructor(store: StructureContainer | StructureStorage, structure: Structure) {
     this.store = store;
-    this.controller = controller;
+    this.structure = structure;
   }
 
   public eligible(creep: Creep): boolean {
@@ -24,12 +24,12 @@ export class Upgrade implements Task {
   }
 
   public perform(creep: Creep): boolean {
-    const BUILDING = 1;
+    const REPAIRING = 1;
     const WITHDRAW = 2;
 
-    if (creep.memory.status === null || (creep.memory.status !== BUILDING && creep.store.getFreeCapacity() === 0)) {
-      creep.memory.status = BUILDING;
-      creep.say(Message.Upgrade);
+    if (creep.memory.status === null || (creep.memory.status !== REPAIRING && creep.store.getFreeCapacity() === 0)) {
+      creep.memory.status = REPAIRING;
+      creep.say(Message.Repair);
     }
 
     if (creep.memory.status !== WITHDRAW && creep.store[RESOURCE_ENERGY] === 0) {
@@ -37,9 +37,9 @@ export class Upgrade implements Task {
       creep.say(Message.Withdraw);
     }
 
-    if (creep.memory.status === BUILDING) {
-      if (creep.upgradeController(this.controller) === ERR_NOT_IN_RANGE) {
-        creep.moveTo(this.controller, Path.Default);
+    if (creep.memory.status === REPAIRING) {
+      if (creep.repair(this.structure) === ERR_NOT_IN_RANGE) {
+        creep.moveTo(this.structure, Path.Default);
       }
     } else if (creep.memory.status === WITHDRAW) {
       if (creep.withdraw(this.store, RESOURCE_ENERGY) === ERR_NOT_IN_RANGE) {
@@ -47,6 +47,6 @@ export class Upgrade implements Task {
       }
     }
 
-    return this.controller.progress === this.controller.progressTotal;
+    return this.structure.hits === this.structure.hitsMax;
   }
 }

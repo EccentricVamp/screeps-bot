@@ -1,5 +1,5 @@
 import { Message, Path } from "Constants";
-import { Task } from "Tasks/Task";
+import { Task } from "./Task";
 export class Pioneer implements Task {
   private source: Source;
   private site: ConstructionSite;

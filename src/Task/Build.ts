@@ -1,12 +1,12 @@
 import { Message, Path } from "Constants";
-import { Task } from "Tasks/Task";
-export class Repair implements Task {
+import { Task } from "./Task";
+export class Build implements Task {
   private store: StructureContainer | StructureStorage;
-  private structure: Structure;
+  private site: ConstructionSite;
 
-  public constructor(store: StructureContainer | StructureStorage, structure: Structure) {
+  public constructor(store: StructureContainer | StructureStorage, site: ConstructionSite) {
     this.store = store;
-    this.structure = structure;
+    this.site = site;
   }
 
   public eligible(creep: Creep): boolean {
@@ -24,12 +24,12 @@ export class Repair implements Task {
   }
 
   public perform(creep: Creep): boolean {
-    const REPAIRING = 1;
+    const BUILDING = 1;
     const WITHDRAW = 2;
 
-    if (creep.memory.status === null || (creep.memory.status !== REPAIRING && creep.store.getFreeCapacity() === 0)) {
-      creep.memory.status = REPAIRING;
-      creep.say(Message.Repair);
+    if (creep.memory.status === null || (creep.memory.status !== BUILDING && creep.store.getFreeCapacity() === 0)) {
+      creep.memory.status = BUILDING;
+      creep.say(Message.Build);
     }
 
     if (creep.memory.status !== WITHDRAW && creep.store[RESOURCE_ENERGY] === 0) {
@@ -37,9 +37,9 @@ export class Repair implements Task {
       creep.say(Message.Withdraw);
     }
 
-    if (creep.memory.status === REPAIRING) {
-      if (creep.repair(this.structure) === ERR_NOT_IN_RANGE) {
-        creep.moveTo(this.structure, Path.Default);
+    if (creep.memory.status === BUILDING) {
+      if (creep.build(this.site) === ERR_NOT_IN_RANGE) {
+        creep.moveTo(this.site, Path.Default);
       }
     } else if (creep.memory.status === WITHDRAW) {
       if (creep.withdraw(this.store, RESOURCE_ENERGY) === ERR_NOT_IN_RANGE) {
@@ -47,6 +47,6 @@ export class Repair implements Task {
       }
     }
 
-    return this.structure.hits === this.structure.hitsMax;
+    return this.site.progress === this.site.progressTotal;
   }
 }

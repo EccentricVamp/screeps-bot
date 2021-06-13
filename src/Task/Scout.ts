@@ -1,5 +1,5 @@
 import { Path } from "Constants";
-import { Task } from "Tasks/Task";
+import { Task } from "./Task";
 export class Scout implements Task {
   private position: RoomPosition;
 

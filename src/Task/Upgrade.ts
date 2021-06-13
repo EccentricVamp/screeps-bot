@@ -1,12 +1,12 @@
 import { Message, Path } from "Constants";
-import { Task } from "Tasks/Task";
-export class Build implements Task {
+import { Task } from "./Task";
+export class Upgrade implements Task {
   private store: StructureContainer | StructureStorage;
-  private site: ConstructionSite;
+  private controller: StructureController;
 
-  public constructor(store: StructureContainer | StructureStorage, site: ConstructionSite) {
+  public constructor(store: StructureContainer | StructureStorage, controller: StructureController) {
     this.store = store;
-    this.site = site;
+    this.controller = controller;
   }
 
   public eligible(creep: Creep): boolean {
@@ -29,7 +29,7 @@ export class Build implements Task {
 
     if (creep.memory.status === null || (creep.memory.status !== BUILDING && creep.store.getFreeCapacity() === 0)) {
       creep.memory.status = BUILDING;
-      creep.say(Message.Build);
+      creep.say(Message.Upgrade);
     }
 
     if (creep.memory.status !== WITHDRAW && creep.store[RESOURCE_ENERGY] === 0) {
@@ -38,8 +38,8 @@ export class Build implements Task {
     }
 
     if (creep.memory.status === BUILDING) {
-      if (creep.build(this.site) === ERR_NOT_IN_RANGE) {
-        creep.moveTo(this.site, Path.Default);
+      if (creep.upgradeController(this.controller) === ERR_NOT_IN_RANGE) {
+        creep.moveTo(this.controller, Path.Default);
       }
     } else if (creep.memory.status === WITHDRAW) {
       if (creep.withdraw(this.store, RESOURCE_ENERGY) === ERR_NOT_IN_RANGE) {
@@ -47,6 +47,6 @@ export class Build implements Task {
       }
     }
 
-    return this.site.progress === this.site.progressTotal;
+    return this.controller.progress === this.controller.progressTotal;
   }
 }
