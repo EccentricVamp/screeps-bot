@@ -1,14 +1,14 @@
 import { hasCapacity, hasEnergy, isEnergy, needsEnergy, needsRepair } from "Filters";
 import { Build } from "Task/Build";
 import { Claim } from "Task/Claim";
-import { Collect } from "Task/Collect";
+import { PickUp } from "Task/PickUp";
 import { Harvest } from "Task/Harvest";
 import { Idle } from "Task/Idle";
 import { Recycle } from "Task/Recycle";
 import { Renew } from "Task/Renew";
 import { Repair } from "Task/Repair";
 import { Task } from "Task/Task";
-import { Transport } from "Task/Transport";
+import { Transfer } from "Task/Transfer";
 import { Upgrade } from "Task/Upgrade";
 import _ from "lodash";
 
@@ -40,11 +40,11 @@ export class Maintainer {
       const need = energyNeeds[0];
       if (energyResources.length > 0) {
         const resource = energyResources.pop() ?? energyResources[0];
-        const collect = new Collect(resource, need);
+        const collect = new PickUp(resource, need);
         tasks.push(collect);
       } else if (energyStores.length > 0) {
         const store = energyStores.pop() ?? energyStores[0];
-        const transport = new Transport(RESOURCE_ENERGY, store, need);
+        const transport = new Transfer(RESOURCE_ENERGY, store, need);
         tasks.push(transport);
       }
     }

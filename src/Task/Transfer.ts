@@ -1,6 +1,6 @@
 import { Message, Path } from "Constants";
 import { Task } from "./Task";
-export class Transport implements Task {
+export class Transfer implements Task {
   private resource: ResourceConstant;
   private source: StructureContainer | StructureStorage;
   private target: StructureContainer | StructureExtension | StructureSpawn | StructureStorage;

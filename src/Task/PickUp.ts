@@ -1,6 +1,6 @@
 import { Message, Path } from "Constants";
 import { Task } from "./Task";
-export class Collect implements Task {
+export class PickUp implements Task {
   private resource: Resource<ResourceConstant>;
   private target: StructureContainer | StructureExtension | StructureSpawn | StructureStorage;
 
