@@ -7,6 +7,8 @@ export abstract class BaseAct<T extends { pos: RoomPosition }> {
 
   protected constructor(target: T) {
     this.parts = new Set();
+    this.parts.add(MOVE);
+
     this.resources = new Set();
     this.target = target;
   }

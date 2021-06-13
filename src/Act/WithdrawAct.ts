@@ -1,12 +1,13 @@
-import { AcquireAct } from "./AcquireAct";
+import { BaseAct } from "./BaseAct";
 
 export type Withdrawable = Structure | Tombstone | Ruin;
 
-export class WithdrawAct extends AcquireAct<Withdrawable> {
+export class WithdrawAct extends BaseAct<Withdrawable> {
   protected resource: ResourceConstant;
 
   public constructor(target: Withdrawable, resource: ResourceConstant) {
     super(target);
+    this.parts.add(CARRY);
     this.resource = resource;
   }
 

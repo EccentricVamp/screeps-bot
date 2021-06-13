@@ -1,9 +1,9 @@
-import { InvestAct } from "./InvestAct";
+import { BaseAct } from "./BaseAct";
 
-export default class RepairAct extends InvestAct<Structure> {
+export default class RepairAct extends BaseAct<Structure> {
   public constructor(target: Structure) {
     super(target);
-    this.parts.add(WORK);
+    this.parts.add(CARRY).add(WORK);
     this.resources.add(RESOURCE_ENERGY);
   }
 

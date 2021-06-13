@@ -1,12 +1,12 @@
-import { AcquireAct } from "./AcquireAct";
+import { BaseAct } from "./BaseAct";
 
 export type Harvestable = Source | Mineral | Deposit;
 export type HarvestReturnCode = CreepActionReturnCode | ERR_NOT_FOUND | ERR_NOT_ENOUGH_RESOURCES | ERR_FULL;
 
-export class HarvestAct extends AcquireAct<Harvestable> {
+export class HarvestAct extends BaseAct<Harvestable> {
   public constructor(target: Harvestable) {
     super(target);
-    this.parts.add(WORK);
+    this.parts.add(CARRY).add(WORK);
   }
 
   public execute(creep: Creep): HarvestReturnCode {
