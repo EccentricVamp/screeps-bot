@@ -95,12 +95,14 @@ export class Maintainer {
     Maintainer.idle(creeps);
   }
 
+  /** Get the best creep for a given task. */
   private static evaluate(creeps: Creep[], task: Task): Creep | undefined {
     const eligibles = creeps.filter(creep => task.eligible(creep));
     const interviews = eligibles.sort((a, b) => task.interview(a) - task.interview(b));
     return interviews[interviews.length - 1];
   }
 
+  /** Perform an idle task for each creep. */
   private static idle(creeps: Creep[]) {
     const idle = new Idle();
     for (const creep of creeps) {
@@ -114,6 +116,7 @@ export class Maintainer {
     }
   }
 
+  /** Recyle creeps who have been flagged for recycling. */
   private static recycle(creeps: Creep[], spawn: StructureSpawn) {
     const recycle = new Recycle(spawn);
     for (const creep of creeps) {
@@ -124,6 +127,7 @@ export class Maintainer {
     }
   }
 
+  /** Renew creeps who need renewal. */
   private static renew(creeps: Creep[], spawn: StructureSpawn) {
     const renew = new Renew(spawn);
     for (const creep of creeps) {
