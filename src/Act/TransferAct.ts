@@ -1,8 +1,8 @@
-import { Invest } from "./Invest";
+import { InvestAct } from "./InvestAct";
 
 export type Transferable = Creep | Structure;
 
-export class Transfer extends Invest<Transferable> {
+export class TransferAct extends InvestAct<Transferable> {
   protected resource: ResourceConstant;
 
   public constructor(target: Transferable, resource: ResourceConstant) {

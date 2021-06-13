@@ -1,9 +1,9 @@
-import { Acquire } from "./Acquire";
+import { AcquireAct } from "./AcquireAct";
 
 export type Harvestable = Source | Mineral | Deposit;
 export type HarvestReturnCode = CreepActionReturnCode | ERR_NOT_FOUND | ERR_NOT_ENOUGH_RESOURCES | ERR_FULL;
 
-export class Harvest extends Acquire<Harvestable> {
+export class HarvestAct extends AcquireAct<Harvestable> {
   public constructor(target: Harvestable) {
     super(target);
     this.parts.add(WORK);

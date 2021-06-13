@@ -1,6 +1,6 @@
-import { Invest } from "./Invest";
+import { InvestAct } from "./InvestAct";
 
-export default class Repair extends Invest<Structure> {
+export default class RepairAct extends InvestAct<Structure> {
   public constructor(target: Structure) {
     super(target);
     this.parts.add(WORK);

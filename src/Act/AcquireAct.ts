@@ -1,10 +1,10 @@
-import { Action } from "./Action";
-import { Harvestable } from "./Harvest";
-import { Withdrawable } from "./Withdraw";
+import { BaseAct } from "./BaseAct";
+import { Harvestable } from "./HarvestAct";
+import { Withdrawable } from "./WithdrawAct";
 
 export type Acquireable = Harvestable | Resource | Withdrawable;
 
-export abstract class Acquire<Acquisition extends Acquireable> extends Action<Acquisition> {
+export abstract class AcquireAct<Acquisition extends Acquireable> extends BaseAct<Acquisition> {
   protected constructor(target: Acquisition) {
     super(target);
     this.parts.add(CARRY).add(MOVE);

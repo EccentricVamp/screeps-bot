@@ -1,6 +1,6 @@
 export type MoveToReturnCode = CreepMoveReturnCode | ERR_NO_PATH | ERR_INVALID_TARGET | ERR_NOT_FOUND;
 
-export abstract class Action<T extends { pos: RoomPosition }> {
+export abstract class BaseAct<T extends { pos: RoomPosition }> {
   public parts: Set<BodyPartConstant>;
   public resources: Set<ResourceConstant>;
   public target: T;

@@ -1,6 +1,6 @@
-import { Invest } from "./Invest";
+import { InvestAct } from "./InvestAct";
 
-export default class Upgrade extends Invest<StructureController> {
+export default class UpgradeAct extends InvestAct<StructureController> {
   public constructor(target: StructureController) {
     super(target);
     this.parts.add(WORK);

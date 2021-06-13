@@ -1,8 +1,8 @@
-import { Invest } from "./Invest";
+import { InvestAct } from "./InvestAct";
 
 export type BuildReturnCode = CreepActionReturnCode | ERR_NOT_ENOUGH_ENERGY | ERR_RCL_NOT_ENOUGH;
 
-export default class Build extends Invest<ConstructionSite> {
+export default class BuildAct extends InvestAct<ConstructionSite> {
   public constructor(target: ConstructionSite) {
     super(target);
     this.parts.add(WORK);
