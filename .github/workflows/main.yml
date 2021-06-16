@@ -11,5 +11,5 @@ jobs:
         env:
           TOKEN: ${{ secrets.AUTH_TOKEN }}
         run: |
-          echo ${$TOKEN:0:5}
-          echo ${$TOKEN:5}
+          echo $TOKEN:0:5
+          echo $TOKEN:5
