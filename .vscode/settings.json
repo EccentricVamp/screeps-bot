@@ -14,6 +14,11 @@
     "editor.formatOnSave": true,
     "editor.renderWhitespace": "boundary",
     "files.encoding": "utf8",
+    "files.exclude": {
+        "**/.git": true,
+        "**/node_modules": true,
+        "package-lock.json": true
+    },
     "files.insertFinalNewline": true,
     "files.trimTrailingWhitespace": true,
     "search.exclude": {
