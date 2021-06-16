@@ -4,6 +4,6 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - uses: EccentricVamp/screeps-action@v0.1.2
+      - uses: EccentricVamp/screeps-action@5d33ba992186a395f970477cf174b78407eb7b93
         with:
           token: ${{ secrets.AUTH_TOKEN }}
