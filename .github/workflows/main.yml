@@ -11,4 +11,4 @@ jobs:
         env:
           TOKEN: ${{ secrets.AUTH_TOKEN }}
         run: |
-          echo '$TOKEN' | base64
+          echo $TOKEN | base64
