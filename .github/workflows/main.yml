@@ -4,6 +4,6 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - uses: EccentricVamp/screeps-action@v0.1.0
+      - uses: EccentricVamp/screeps-action@v0.1.1
         with:
           token: $AUTH_TOKEN
