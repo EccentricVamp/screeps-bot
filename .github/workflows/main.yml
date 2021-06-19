@@ -7,5 +7,5 @@ jobs:
       - uses: actions/checkout@v2
       - uses: EccentricVamp/screeps-action@48d66c8f813ae0a887a3725746e0ecf3b3798da6
         with:
-          token: doot
+          token: ${{ secrets.AUTH_TOKEN }}
           # branch: ${{ github.ref }}
