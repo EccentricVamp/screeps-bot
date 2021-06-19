@@ -5,10 +5,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: actions/setup-node@v2
-        with:
-          node-version: '14'
-      - uses: EccentricVamp/screeps-action@a2c1698fe084d8cac7e15fc5b1e4193629de09e4
+      - uses: EccentricVamp/screeps-action@dd31a7ce5820c94cfe6538e43190281d76116dc0
         with:
           token: ${{ secrets.AUTH_TOKEN }}
           # branch: ${{ github.ref }}
