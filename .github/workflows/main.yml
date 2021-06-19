@@ -5,7 +5,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: EccentricVamp/screeps-action@cb8a96e8e070f6fc1cb5f77e6e798cdca79df935
+      - uses: EccentricVamp/screeps-action@643ca75b0c834e1a7be1fcf2ec10e85c8876984e
         with:
           token: doot
           # branch: ${{ github.ref }}
