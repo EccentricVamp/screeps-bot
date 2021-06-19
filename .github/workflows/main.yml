@@ -8,7 +8,7 @@ jobs:
       - uses: actions/setup-node@v2
         with:
           node-version: '14'
-      - uses: EccentricVamp/screeps-action@437fc88ea32a32ff6c1bb531870a8dfbe9db2fdc
+      - uses: EccentricVamp/screeps-action@a2c1698fe084d8cac7e15fc5b1e4193629de09e4
         with:
           token: ${{ secrets.AUTH_TOKEN }}
           # branch: ${{ github.ref }}
