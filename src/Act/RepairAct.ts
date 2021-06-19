@@ -1,6 +1,6 @@
 import { BaseAct } from "./BaseAct";
 
-export default class RepairAct extends BaseAct<Structure> {
+export class RepairAct extends BaseAct<Structure> {
   public constructor(target: Structure) {
     super(target);
     this.parts.add(CARRY).add(WORK);

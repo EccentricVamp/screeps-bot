@@ -1,6 +1,6 @@
 import { BaseAct } from "./BaseAct";
 
-export default class UpgradeAct extends BaseAct<StructureController> {
+export class UpgradeAct extends BaseAct<StructureController> {
   public constructor(target: StructureController) {
     super(target);
     this.parts.add(CARRY).add(WORK);

@@ -2,7 +2,7 @@ import { BaseAct } from "./BaseAct";
 
 export type BuildReturnCode = CreepActionReturnCode | ERR_NOT_ENOUGH_ENERGY | ERR_RCL_NOT_ENOUGH;
 
-export default class BuildAct extends BaseAct<ConstructionSite> {
+export class BuildAct extends BaseAct<ConstructionSite> {
   public constructor(target: ConstructionSite) {
     super(target);
     this.parts.add(CARRY).add(WORK);
