@@ -4,6 +4,8 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - uses: EccentricVamp/screeps-action@d15807d7b47d2d138a1ff6c4f3415bc95635b2e3
+      - uses: actions/checkout@v2
+      - uses: EccentricVamp/screeps-action@437fc88ea32a32ff6c1bb531870a8dfbe9db2fdc
         with:
           token: ${{ secrets.AUTH_TOKEN }}
+          # branch: ${{ github.ref }}
