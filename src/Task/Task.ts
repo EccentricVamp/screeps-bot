@@ -1,5 +1,7 @@
+import { Act } from "Act/BaseAct";
+
 export interface Task {
-  eligible(creep: Creep): boolean;
-  interview(creep: Creep): number;
+  acts: Act[];
+  parts: BodyPartConstant[];
   perform(creep: Creep): boolean;
 }
