@@ -7,7 +7,7 @@ export class Withdraw implements GenericAct<Withdrawable> {
   public resources: ResourceConstant[];
   public target: Withdrawable;
 
-  public constructor(target: Withdrawable, resource: ResourceConstant) {
+  public constructor(target: Withdrawable, resource: ResourceConstant = RESOURCE_ENERGY) {
     this.resources = [resource];
     this.target = target;
   }

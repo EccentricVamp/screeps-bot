@@ -7,7 +7,7 @@ export class Transfer implements GenericAct<Transferable> {
   public resources: ResourceConstant[];
   public target: Transferable;
 
-  public constructor(target: Transferable, resource: ResourceConstant) {
+  public constructor(target: Transferable, resource: ResourceConstant = RESOURCE_ENERGY) {
     this.resources = [resource];
     this.target = target;
   }
