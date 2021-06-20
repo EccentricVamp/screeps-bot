@@ -1,13 +1,15 @@
-import { BaseAct } from "./BaseAct";
+import { BaseAct, DEFAULT_PARTS } from "./BaseAct";
 
 export type Withdrawable = Structure | Tombstone | Ruin;
 
 export class WithdrawAct extends BaseAct<Withdrawable> {
+  public parts = DEFAULT_PARTS.concat(CARRY);
+  public resources: ResourceConstant[]
   protected resource: ResourceConstant;
 
   public constructor(target: Withdrawable, resource: ResourceConstant) {
     super(target);
-    this.parts.add(CARRY);
+    this.resources = [resource];
     this.resource = resource;
   }
 
