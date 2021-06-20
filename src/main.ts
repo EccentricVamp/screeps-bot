@@ -2,7 +2,7 @@ import { Maintainer } from "Maintainer";
 
 declare global {
   interface CreepMemory {
-    status: number | null;
+    status: number | null | undefined;
   }
 
   interface Memory {
