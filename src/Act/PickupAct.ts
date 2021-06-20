@@ -1,13 +1,14 @@
-import { BaseAct, DEFAULT_PARTS } from "./BaseAct";
+import { GenericAct } from "./BaseAct";
 
 export type PickupReturnCode = CreepActionReturnCode | ERR_FULL;
 
-export class PickupAct extends BaseAct<Resource> {
-  public parts = DEFAULT_PARTS.concat([CARRY]);
+export class PickupAct implements GenericAct<Resource> {
+  public parts = [MOVE, CARRY];
   public resources = [];
+  public target: Resource;
 
   public constructor(target: Resource) {
-    super(target);
+    this.target = target;
   }
 
   public execute(creep: Creep): PickupReturnCode {

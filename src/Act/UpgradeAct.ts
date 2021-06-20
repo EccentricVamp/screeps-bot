@@ -1,11 +1,12 @@
-import { BaseAct, DEFAULT_PARTS } from "./BaseAct";
+import { GenericAct } from "./BaseAct";
 
-export class UpgradeAct extends BaseAct<StructureController> {
-  public parts = DEFAULT_PARTS.concat([CARRY, WORK]);
+export class UpgradeAct implements GenericAct<StructureController> {
+  public parts = [MOVE, CARRY, WORK];
   public resources = [RESOURCE_ENERGY];
+  public target: StructureController;
 
   public constructor(target: StructureController) {
-    super(target);
+    this.target = target;
   }
 
   public execute(creep: Creep): ScreepsReturnCode {

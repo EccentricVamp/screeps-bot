@@ -1,13 +1,14 @@
-import { BaseAct, DEFAULT_PARTS } from "./BaseAct";
+import { GenericAct } from "./BaseAct";
 
 export type BuildReturnCode = CreepActionReturnCode | ERR_NOT_ENOUGH_ENERGY | ERR_RCL_NOT_ENOUGH;
 
-export class BuildAct extends BaseAct<ConstructionSite> {
-  public parts = DEFAULT_PARTS.concat([CARRY, WORK]);
+export class BuildAct implements GenericAct<ConstructionSite> {
+  public parts = [MOVE, CARRY, WORK];
   public resources = [RESOURCE_ENERGY];
+  public target: ConstructionSite;
 
   public constructor(target: ConstructionSite) {
-    super(target);
+    this.target = target;
   }
 
   public execute(creep: Creep): BuildReturnCode {

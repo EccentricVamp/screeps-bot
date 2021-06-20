@@ -1,19 +1,18 @@
-import { BaseAct, DEFAULT_PARTS } from "./BaseAct";
+import { GenericAct } from "./BaseAct";
 
 export type Withdrawable = Structure | Tombstone | Ruin;
 
-export class WithdrawAct extends BaseAct<Withdrawable> {
-  public parts = DEFAULT_PARTS.concat(CARRY);
-  public resources: ResourceConstant[]
-  protected resource: ResourceConstant;
+export class WithdrawAct implements GenericAct<Withdrawable> {
+  public parts = [MOVE, CARRY];
+  public resources: ResourceConstant[];
+  public target: Withdrawable;
 
   public constructor(target: Withdrawable, resource: ResourceConstant) {
-    super(target);
     this.resources = [resource];
-    this.resource = resource;
+    this.target = target;
   }
 
   public execute(creep: Creep): ScreepsReturnCode {
-    return creep.withdraw(this.target, this.resource);
+    return creep.withdraw(this.target, this.resources[0]);
   }
 }

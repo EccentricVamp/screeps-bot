@@ -1,11 +1,12 @@
-import { BaseAct, DEFAULT_PARTS } from "./BaseAct";
+import { GenericAct } from "./BaseAct";
 
-export class RepairAct extends BaseAct<Structure> {
-  public parts = DEFAULT_PARTS.concat([CARRY, WORK]);
+export class RepairAct implements GenericAct<Structure> {
+  public parts = [MOVE, CARRY, WORK];
   public resources = [RESOURCE_ENERGY];
+  public target: Structure;
 
   public constructor(target: Structure) {
-    super(target);
+    this.target = target;
   }
 
   public execute(creep: Creep): CreepActionReturnCode | ERR_NOT_ENOUGH_ENERGY {
