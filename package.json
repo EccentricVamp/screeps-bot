@@ -1,5 +1,9 @@
 {
-  "main": "main.js",
+  "name": "eccentricvamp-screeps-bot",
+  "description": "EccentricVamp's bot for the programming game Screeps",
+  "repository": "https://github.com/eccentricvamp/screeps",
+  "license": "Unlicense",
+  "main": "dist/main.js",
   "scripts": {
     "lint": "eslint \"src/**/*.ts\" --fix",
     "build": "rollup -c",
@@ -27,8 +31,5 @@
     "rollup-plugin-delete": "^2.0.0",
     "rollup-plugin-screeps": "^1.0.0",
     "typescript": "^3.8.3"
-  },
-  "license": "Unlicense",
-  "description": "eccentricvamp/screeps",
-  "repository": "https://github.com/eccentricvamp/screeps"
+  }
 }
