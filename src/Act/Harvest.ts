@@ -1,7 +1,11 @@
 import { GenericAct } from "./Act";
 
 export type Harvestable = Source | Mineral | Deposit;
-export type HarvestReturnCode = CreepActionReturnCode | ERR_NOT_FOUND | ERR_NOT_ENOUGH_RESOURCES | ERR_FULL;
+export type HarvestReturnCode =
+  | CreepActionReturnCode
+  | ERR_NOT_FOUND
+  | ERR_NOT_ENOUGH_RESOURCES
+  | ERR_FULL;
 
 export class Harvest implements GenericAct<Harvestable> {
   public parts = [MOVE, CARRY, WORK];

@@ -9,7 +9,10 @@ export class Transfer implements Task {
   public acts: Act.Act[];
   public parts: BodyPartConstant[];
 
-  public constructor(transfering: Act.Transfer, collecting: Act.Harvest | Act.Pickup | Act.Withdraw) {
+  public constructor(
+    transfering: Act.Transfer,
+    collecting: Act.Harvest | Act.Pickup | Act.Withdraw
+  ) {
     this.acts = [transfering, collecting];
     this.parts = Act.getParts(this.acts);
   }

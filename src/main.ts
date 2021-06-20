@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Maintainer } from "Maintainer";
 
 declare global {
