@@ -1,36 +1,32 @@
-import { Message, Path } from "Constants";
+import * as Act from "Act/Act"
+import { getStatus, moveTo, setStatus } from "Creep";
 import { Task } from "./Task";
+
+export const RECYCLING = 98;
+
 export class Recycle implements Task {
-  private spawn: StructureSpawn;
+  public acts: Act.Act[];
+  public parts = [];
 
-  public static STATUS = 98;
-
-  public constructor(spawn: StructureSpawn) {
-    this.spawn = spawn;
-  }
-
-  public eligible(): boolean {
-    return true;
-  }
-
-  public interview(): number {
-    return 1;
+  public constructor(recycling: Act.Recycle) {
+    this.acts = [recycling];
   }
 
   public perform(creep: Creep): boolean {
-    if (creep.memory.status !== Recycle.STATUS) {
-      creep.memory.status = Recycle.STATUS;
-      creep.say(Message.Recycle);
+    let status = getStatus(creep);
+    if (status === null) status = setStatus(creep, RECYCLING);
+    const act = this.acts[0];
+
+    switch (act.execute(creep)) {
+      case ERR_NOT_IN_RANGE:
+        moveTo(creep, act.target);
+        break;
+      case ERR_INVALID_TARGET:
+        return true;
+      default:
+        break;
     }
 
-    const result = this.spawn.recycleCreep(creep);
-    if (result === ERR_NOT_IN_RANGE) {
-      creep.moveTo(this.spawn, Path.Recycle);
-    }
-
-    if (result === ERR_INVALID_TARGET) {
-      creep.memory.status = null;
-      return true;
-    } else return false;
+    return false;
   }
 }

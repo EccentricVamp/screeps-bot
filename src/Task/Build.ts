@@ -1,50 +1,39 @@
-import { Message, Path } from "Constants";
+import * as Act from "Act/Act"
+import { getStatus, moveTo, setStatus } from "Creep";
 import { Task } from "./Task";
+
+export const BUILDING = 0;
+export const ENERGIZING = 1;
+
 export class Build implements Task {
-  private store: StructureContainer | StructureStorage;
   private site: ConstructionSite;
 
-  public constructor(store: StructureContainer | StructureStorage, site: ConstructionSite) {
-    this.store = store;
-    this.site = site;
-  }
+  public acts: Act.Act[];
+  public parts: BodyPartConstant[];
 
-  public eligible(creep: Creep): boolean {
-    const work = creep.getActiveBodyparts(WORK);
-    const carry = creep.getActiveBodyparts(CARRY);
-    const move = creep.getActiveBodyparts(MOVE);
-    return work > 0 && carry > 0 && move > 0;
-  }
-
-  public interview(creep: Creep): number {
-    const work = creep.getActiveBodyparts(WORK);
-    const carry = creep.getActiveBodyparts(CARRY);
-    const move = creep.getActiveBodyparts(MOVE);
-    return work + carry + move;
+  public constructor(building: Act.Build, energizing: Act.Harvest | Act.Pickup | Act.Withdraw) {
+    this.site = building.target;
+    this.acts = [building, energizing];
+    this.parts = Act.getParts(this.acts);
   }
 
   public perform(creep: Creep): boolean {
-    const BUILDING = 1;
-    const WITHDRAW = 2;
+    let status = getStatus(creep);
+    if (status === null) status = setStatus(creep, BUILDING);
+    const act = this.acts[status];
 
-    if (creep.memory.status === null || (creep.memory.status !== BUILDING && creep.store.getFreeCapacity() === 0)) {
-      creep.memory.status = BUILDING;
-      creep.say(Message.Build);
-    }
-
-    if (creep.memory.status !== WITHDRAW && creep.store[RESOURCE_ENERGY] === 0) {
-      creep.memory.status = WITHDRAW;
-      creep.say(Message.Withdraw);
-    }
-
-    if (creep.memory.status === BUILDING) {
-      if (creep.build(this.site) === ERR_NOT_IN_RANGE) {
-        creep.moveTo(this.site, Path.Default);
-      }
-    } else if (creep.memory.status === WITHDRAW) {
-      if (creep.withdraw(this.store, RESOURCE_ENERGY) === ERR_NOT_IN_RANGE) {
-        creep.moveTo(this.store, Path.Energy);
-      }
+    switch (act.execute(creep)) {
+      case ERR_NOT_IN_RANGE:
+        moveTo(creep, act.target);
+        break;
+      case ERR_NOT_ENOUGH_ENERGY:
+        setStatus(creep, ENERGIZING);
+        break;
+      case ERR_FULL:
+        setStatus(creep, BUILDING);
+        break;
+      default:
+        break;
     }
 
     return this.site.progress === this.site.progressTotal;
