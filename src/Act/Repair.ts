@@ -1,6 +1,6 @@
 import { GenericAct } from "./Act";
 
-export type RepairReturnCode =  CreepActionReturnCode | ERR_NOT_ENOUGH_ENERGY;
+export type RepairReturnCode = CreepActionReturnCode | ERR_NOT_ENOUGH_ENERGY;
 
 export class Repair implements GenericAct<Structure> {
   public parts = [MOVE, CARRY, WORK];

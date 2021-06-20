@@ -15,7 +15,7 @@ export interface GenericAct<Target extends { pos: RoomPosition }> extends Act {
 }
 
 /** Returns the union of the parts required for each act */
-export function getParts(acts: Act[]) {
+export function getParts(acts: Act[]): BodyPartConstant[] {
   const actParts = acts.map(a => a.parts);
   return _.union(...actParts);
 }

@@ -1,6 +1,6 @@
 import * as Act from "Act/Act";
-import { moveTo } from "Creep";
 import { Task } from "./Task";
+import { moveTo } from "Creep";
 
 export const CLAIMING = 0;
 

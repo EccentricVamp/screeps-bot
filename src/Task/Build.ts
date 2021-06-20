@@ -1,4 +1,4 @@
-import * as Act from "Act/Act"
+import * as Act from "Act/Act";
 import { getStatus, moveTo, setStatus } from "Creep";
 import { Task } from "./Task";
 

@@ -1,6 +1,6 @@
 export type MoveToReturnCode = CreepMoveReturnCode | ERR_NO_PATH | ERR_INVALID_TARGET | ERR_NOT_FOUND;
 
-export function moveTo(creep: Creep, target: {pos: RoomPosition}): MoveToReturnCode {
+export function moveTo(creep: Creep, target: { pos: RoomPosition }): MoveToReturnCode {
   return creep.moveTo(target);
 }
 

@@ -5,7 +5,7 @@ export class Idle implements Task {
   public parts = [MOVE];
   public target: RoomPosition;
 
-  constructor(target: RoomPosition) {
+  public constructor(target: RoomPosition) {
     this.target = target;
   }
 
