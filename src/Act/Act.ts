@@ -24,6 +24,8 @@ export * from "./Build";
 export * from "./Claim";
 export * from "./Harvest";
 export * from "./Pickup";
+export * from "./Recycle";
+export * from "./Renew";
 export * from "./Repair";
 export * from "./Transfer";
 export * from "./Upgrade";
