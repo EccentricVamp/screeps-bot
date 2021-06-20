@@ -1,6 +1,6 @@
-import { GenericAct } from "./BaseAct";
+import { GenericAct } from "./Act";
 
-export class UpgradeAct implements GenericAct<StructureController> {
+export class Upgrade implements GenericAct<StructureController> {
   public parts = [MOVE, CARRY, WORK];
   public resources = [RESOURCE_ENERGY];
   public target: StructureController;

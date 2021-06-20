@@ -1,4 +1,4 @@
-import { Act } from "Act/BaseAct";
+import { Act } from "Act/Act";
 
 export interface Task {
   acts: Act[];

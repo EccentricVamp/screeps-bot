@@ -1,8 +1,8 @@
-import { GenericAct } from "./BaseAct";
+import { GenericAct } from "./Act";
 
 export type Transferable = Creep | Structure;
 
-export class TransferAct implements GenericAct<Transferable> {
+export class Transfer implements GenericAct<Transferable> {
   public parts = [MOVE, CARRY];
   public resources: ResourceConstant[];
   public target: Transferable;

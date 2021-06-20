@@ -1,6 +1,6 @@
-import { GenericAct } from "./BaseAct";
+import { GenericAct } from "./Act";
 
-export class RepairAct implements GenericAct<Structure> {
+export class Repair implements GenericAct<Structure> {
   public parts = [MOVE, CARRY, WORK];
   public resources = [RESOURCE_ENERGY];
   public target: Structure;

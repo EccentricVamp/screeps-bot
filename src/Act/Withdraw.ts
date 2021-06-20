@@ -1,8 +1,8 @@
-import { GenericAct } from "./BaseAct";
+import { GenericAct } from "./Act";
 
 export type Withdrawable = Structure | Tombstone | Ruin;
 
-export class WithdrawAct implements GenericAct<Withdrawable> {
+export class Withdraw implements GenericAct<Withdrawable> {
   public parts = [MOVE, CARRY];
   public resources: ResourceConstant[];
   public target: Withdrawable;

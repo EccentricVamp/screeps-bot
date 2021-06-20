@@ -1,8 +1,8 @@
-import { GenericAct } from "./BaseAct";
+import { GenericAct } from "./Act";
 
 export type PickupReturnCode = CreepActionReturnCode | ERR_FULL;
 
-export class PickupAct implements GenericAct<Resource> {
+export class Pickup implements GenericAct<Resource> {
   public parts = [MOVE, CARRY];
   public resources = [];
   public target: Resource;
