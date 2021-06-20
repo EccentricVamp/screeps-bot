@@ -21,6 +21,7 @@ export function getParts(acts: Act[]) {
 }
 
 export * from "./Build";
+export * from "./Claim";
 export * from "./Harvest";
 export * from "./Pickup";
 export * from "./Repair";

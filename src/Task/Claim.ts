@@ -1,37 +1,31 @@
-import { Message, Path } from "Constants";
+import * as Act from "Act/Act";
+import { getStatus, moveTo } from "Creep";
 import { Task } from "./Task";
+
+export const CLAIMING = 0;
+
 export class Claim implements Task {
-  private controller: StructureController;
+  public acts: Act.Act[];
+  public parts: BodyPartConstant[];
 
-  public constructor(controller: StructureController) {
-    this.controller = controller;
-  }
-
-  public eligible(creep: Creep): boolean {
-    const claim = creep.getActiveBodyparts(CLAIM);
-    const move = creep.getActiveBodyparts(MOVE);
-    return claim > 0 && move > 0;
-  }
-
-  public interview(creep: Creep): number {
-    const claim = creep.getActiveBodyparts(CLAIM);
-    const move = creep.getActiveBodyparts(MOVE);
-    return claim + move;
+  public constructor(claiming: Act.Claim) {
+    this.acts = [claiming];
+    this.parts = Act.getParts(this.acts);
   }
 
   public perform(creep: Creep): boolean {
-    const CLAIMING = 1;
+    const act = this.acts[CLAIMING];
 
-    if (creep.memory.status !== CLAIMING) {
-      creep.memory.status = CLAIMING;
-      creep.say(Message.Claim);
+    switch (act.execute(creep)) {
+      case ERR_NOT_IN_RANGE:
+        moveTo(creep, act.target);
+        break;
+      case ERR_INVALID_TARGET:
+        return true;
+      default:
+        break;
     }
 
-    const result = creep.claimController(this.controller);
-    if (result === ERR_NOT_IN_RANGE) {
-      creep.moveTo(this.controller, Path.Claim);
-    }
-
-    return result === ERR_INVALID_TARGET;
+    return false;
   }
 }
