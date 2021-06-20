@@ -15,8 +15,7 @@ export class Upgrade implements Task {
   }
 
   public perform(creep: Creep): boolean {
-    let status = getStatus(creep);
-    if (status === null) status = setStatus(creep, UPGRADING);
+    const status = getStatus(creep, [UPGRADING, ENERGIZING]);
     const act = this.acts[status];
 
     switch (act.execute(creep)) {

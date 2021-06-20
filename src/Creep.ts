@@ -8,11 +8,11 @@ export function getParts(creep: Creep): BodyPartConstant[] {
   return creep.body.map(part => part.type);
 }
 
-export function getStatus(creep: Creep, defaultStatus: number | null = null): number | null {
+export function getStatus(creep: Creep, expected: number[]): number {
   const status = creep.memory.status;
-  if (status === undefined || status === null) {
-    creep.memory.status = defaultStatus;
-    return defaultStatus;
+  if (status === undefined || status === null || !expected.includes(status)) {
+    creep.memory.status = expected[0];
+    return expected[0];
   } else return status;
 }
 

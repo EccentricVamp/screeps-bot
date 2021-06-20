@@ -18,8 +18,7 @@ export class Repair implements Task {
   }
 
   public perform(creep: Creep): boolean {
-    let status = getStatus(creep);
-    if (status === null) status = setStatus(creep, REPAIRING);
+    const status = getStatus(creep, [REPAIRING, ENERGIZING]);
     const act = this.acts[status];
 
     switch (act.execute(creep)) {

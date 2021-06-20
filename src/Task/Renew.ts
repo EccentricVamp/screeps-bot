@@ -14,8 +14,7 @@ export class Renew implements Task {
   }
 
   public perform(creep: Creep): boolean {
-    let status = getStatus(creep);
-    if (status === null) status = setStatus(creep, RENEWING);
+    setStatus(creep, RENEWING);
     const act = this.acts[0];
 
     switch (act.execute(creep)) {

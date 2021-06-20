@@ -15,8 +15,7 @@ export class Transfer implements Task {
   }
 
   public perform(creep: Creep): boolean {
-    let status = getStatus(creep);
-    if (status === null) status = setStatus(creep, TRANSFERING);
+    const status = getStatus(creep, [TRANSFERING, COLLECTING]);
     const act = this.acts[status];
 
     switch (act.execute(creep)) {

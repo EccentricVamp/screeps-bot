@@ -18,8 +18,7 @@ export class Build implements Task {
   }
 
   public perform(creep: Creep): boolean {
-    let status = getStatus(creep);
-    if (status === null) status = setStatus(creep, BUILDING);
+    const status = getStatus(creep, [BUILDING, ENERGIZING]);
     const act = this.acts[status];
 
     switch (act.execute(creep)) {

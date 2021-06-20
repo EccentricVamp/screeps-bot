@@ -14,8 +14,7 @@ export class Harvest implements Task {
   }
 
   public perform(creep: Creep): boolean {
-    let status = getStatus(creep);
-    if (status === null) status = setStatus(creep, HARVESTING);
+    const status = getStatus(creep, [HARVESTING, TRANSFERING]);
     const act = this.acts[status];
 
     switch (act.execute(creep)) {

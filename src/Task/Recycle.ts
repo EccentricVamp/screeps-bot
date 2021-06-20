@@ -13,8 +13,7 @@ export class Recycle implements Task {
   }
 
   public perform(creep: Creep): boolean {
-    let status = getStatus(creep);
-    if (status === null) status = setStatus(creep, RECYCLING);
+    setStatus(creep, RECYCLING);
     const act = this.acts[0];
 
     switch (act.execute(creep)) {
