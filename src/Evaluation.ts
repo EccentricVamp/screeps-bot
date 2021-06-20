@@ -9,7 +9,10 @@ export class Evaluation {
     const partCounts = _.countBy(getParts(creep));
     for (const part in parts) {
       const count = partCounts[part];
-      this.eligible &&= count !== 0;
+      if (count === 0) {
+        this.eligible = false;
+        break;
+      }
       this.score += count;
     }
   }
