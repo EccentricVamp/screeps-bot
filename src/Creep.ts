@@ -13,6 +13,7 @@ export function getStatus(creep: Creep): number | null {
   return creep.memory.status;
 }
 
-export function setStatus(creep: Creep, status: number | null): number | null {
-  return creep.memory.status = status;
+export function setStatus<T extends number | null>(creep: Creep, status: T): T {
+  creep.memory.status = status;
+  return status;
 }
