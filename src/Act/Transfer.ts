@@ -13,6 +13,9 @@ export class Transfer implements GenericAct<Transferable> {
   }
 
   public execute(creep: Creep): ScreepsReturnCode {
-    return creep.transfer(this.target, this.resources[0]);
+    const resource = this.resources[0];
+    const result = creep.transfer(this.target, resource);
+    if (creep.store[resource] === 0) return ERR_NOT_ENOUGH_RESOURCES;
+    else return result;
   }
 }
