@@ -1,3 +1,5 @@
+import _ from "lodash";
+
 export interface Act {
   parts: BodyPartConstant[];
   resources: ResourceConstant[];
@@ -7,9 +9,10 @@ export interface Act {
 }
 
 export interface GenericAct<Target extends { pos: RoomPosition }> extends Act {
-  parts: BodyPartConstant[];
-  resources: ResourceConstant[];
   target: Target;
+}
 
-  execute(creep: Creep): ScreepsReturnCode;
+export function getParts(acts: Act[]) {
+  const actParts = acts.map(a => a.parts);
+  return _.union(...actParts);
 }
