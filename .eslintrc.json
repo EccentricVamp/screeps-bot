@@ -15,6 +15,10 @@
     "plugin:import/warnings",
     "plugin:import/typescript"
   ],
+  "ignorePatterns": [
+    "rollup.config.js",
+    "**/dist/*"
+  ],
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
     "project": "tsconfig.json",
@@ -22,7 +26,8 @@
   },
   "plugins": [
     "@typescript-eslint",
-    "import"
+    "import",
+    "prettier"
   ],
   "settings": {
     "import/parsers": {
@@ -70,6 +75,16 @@
     "arrow-parens": [
       "off",
       "as-needed"
+    ],
+    "prettier/prettier": [
+      "error", {
+        "semi": true,
+        "tabWidth": 2,
+        "printWidth": 100,
+        "singleQuote": false,
+        "trailingComma": "none",
+        "arrowParens": "avoid"
+      }
     ],
     "camelcase": "error",
     "complexity": "off",
