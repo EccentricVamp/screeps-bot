@@ -2,7 +2,7 @@ import { GenericAct } from "./Act";
 
 export class Renew implements GenericAct<StructureSpawn> {
   public parts = [];
-  public resources = [];
+  public resources = [RESOURCE_ENERGY];
   public target: StructureSpawn;
 
   public constructor(target: StructureSpawn) {
