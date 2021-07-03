@@ -22,6 +22,9 @@ export class Renew implements Task {
       case ERR_NOT_IN_RANGE:
         moveTo(creep, act.target);
         break;
+      case ERR_FULL:
+        setStatus(creep, null);
+        break;
       default:
         break;
     }
