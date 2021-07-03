@@ -1,3 +1,4 @@
+import { ActCollect, Factory as TaskFactory } from "Task/Factory";
 import { Harvest as ActHarvest, Harvestable } from "Act/Harvest";
 import { Withdraw as ActWithdraw, Withdrawable } from "Act/Withdraw";
 import { RENEW, THRESHOLD } from "Task/Renew";
@@ -6,7 +7,6 @@ import { Pickup as ActPickup } from "Act/Pickup";
 import { Evaluation } from "Evaluation";
 import { RECYCLE } from "Task/Recycle";
 import { Task } from "Task/Task";
-import { Factory as TaskFactory } from "Task/Factory";
 import _ from "lodash";
 
 export class Maintainer {
@@ -54,20 +54,9 @@ export class Maintainer {
     const energySources = room.find(FIND_SOURCES_ACTIVE);
     if (energyNeeds.length > 0) {
       const need = energyNeeds[0];
+      const collect = Maintainer.findEnergy(energyResources, energyStores, energySources);
 
-      let collect;
-      if (energyResources.length > 0) {
-        const resource = energyResources.pop() as Resource;
-        collect = new ActPickup(resource);
-      } else if (energyStores.length > 0) {
-        const store = energyStores.pop() as Withdrawable;
-        collect = new ActWithdraw(store);
-      } else if (energySources.length > 0) {
-        const source = energySources.pop() as Harvestable;
-        collect = new ActHarvest(source);
-      }
-
-      if (collect !== undefined) {
+      if (collect !== null) {
         tasks.push(TaskFactory.Transfer(need, collect));
       }
     }
@@ -85,20 +74,9 @@ export class Maintainer {
     const sites = room.find(FIND_CONSTRUCTION_SITES);
     if (sites.length > 0) {
       const site = sites[0];
+      const collect = Maintainer.findEnergy(energyResources, energyStores, energySources);
 
-      let collect;
-      if (energyResources.length > 0) {
-        const resource = energyResources.pop() ?? energyResources[0];
-        collect = new ActPickup(resource);
-      } else if (energyStores.length > 0) {
-        const store = energyStores.pop() ?? energyStores[0];
-        collect = new ActWithdraw(store);
-      } else if (energySources.length > 0) {
-        const source = energySources.pop() ?? energySources[0];
-        collect = new ActHarvest(source);
-      }
-
-      if (collect !== undefined) {
+      if (collect !== null) {
         tasks.push(TaskFactory.Build(site, collect));
       }
     }
@@ -127,5 +105,22 @@ export class Maintainer {
       .filter(evaluation => evaluation.eligible)
       .sort((a, b) => a.score - b.score);
     return evaluations[evaluations.length - 1].creep;
+  }
+
+  public static findEnergy(
+    resources: Resource<RESOURCE_ENERGY>[],
+    stores: (StructureContainer | StructureStorage)[],
+    sources: Source[]
+  ): ActCollect | null {
+    if (resources.length > 0) {
+      const resource = resources.pop() as Resource;
+      return new ActPickup(resource);
+    } else if (stores.length > 0) {
+      const store = stores.pop() as Withdrawable;
+      return new ActWithdraw(store);
+    } else if (sources.length > 0) {
+      const source = sources.pop() as Harvestable;
+      return new ActHarvest(source);
+    } else return null;
   }
 }
