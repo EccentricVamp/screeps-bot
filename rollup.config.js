@@ -1,7 +1,6 @@
 "use strict";
 
 import del from "rollup-plugin-delete";
-import screeps from "rollup-plugin-screeps";
 import typescript from "@rollup/plugin-typescript";
 
 export default {
@@ -14,10 +13,6 @@ export default {
   },
   plugins: [
     del({ targets: "dist/*" }),
-    screeps({
-      configFile: "./screeps.json",
-      dryRun: !process.env.publish ?? true
-    }),
     typescript({ tsconfig: "./tsconfig.json" })
   ]
 };
