@@ -1,7 +1,5 @@
 'use strict';
 
-Object.defineProperty(exports, '__esModule', { value: true });
-
 /** Match useful energy resources. */
 function isEnergy(resource) {
     return resource.resourceType === RESOURCE_ENERGY && resource.amount > 100;

@@ -8,9 +8,7 @@ export default {
     "src/main.ts",
     "src/Constants.ts",
     "src/Creep.ts",
-    "src/Evaluation.ts",
-    "src/Filters.ts",
-    "src/Maintainer.ts",
+    "src/Filter.ts",
     "src/Act/Act.ts",
     "src/Task/Task.ts",
   ],
@@ -18,7 +16,8 @@ export default {
   output: {
     dir: "dist",
     format: "cjs",
-    interop: "esModule"
+    interop: "esModule",
+    esModule: false
   },
   plugins: [
     del({ targets: "dist/*" }),

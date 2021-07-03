@@ -1,7 +1,5 @@
 'use strict';
 
-Object.defineProperty(exports, '__esModule', { value: true });
-
 const Path = {
     Claim: { visualizePathStyle: { stroke: "#aa00ff" /* Purple */ } },
     Default: { visualizePathStyle: { stroke: "#ffffff" /* White */ } },

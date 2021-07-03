@@ -1,6 +1,6 @@
 'use strict';
 
-Object.defineProperty(exports, '__esModule', { value: true });
+var _ = require('lodash');
 
 function moveTo(creep, target) {
     return creep.moveTo(target);
@@ -21,7 +21,24 @@ function setStatus(creep, status) {
     creep.memory.status = status;
     return status;
 }
+class Evaluation {
+    constructor(creep, parts) {
+        this.eligible = true;
+        this.score = 0;
+        this.creep = creep;
+        const partCounts = _['default'].countBy(getParts(creep));
+        for (const part of parts) {
+            const count = partCounts[part];
+            if (count === 0) {
+                this.eligible = false;
+                break;
+            }
+            this.score += count;
+        }
+    }
+}
 
+exports.Evaluation = Evaluation;
 exports.getParts = getParts;
 exports.getStatus = getStatus;
 exports.moveTo = moveTo;
