@@ -1,11 +1,11 @@
-import * as Act from "Act/Act";
-import { Build } from "./Build";
-import { Claim } from "./Claim";
-import { Harvest } from "./Harvest";
-import { Idle } from "./Idle";
-import { Recycle } from "./Recycle";
-import { Renew } from "./Renew";
-import { Transfer } from "./Transfer";
+import * as Act from "act/act";
+import { Build } from "./build";
+import { Claim } from "./claim";
+import { Harvest } from "./harvest";
+import { Idle } from "./idle";
+import { Recycle } from "./recycle";
+import { Renew } from "./renew";
+import { Transfer } from "./transfer";
 
 export interface Task {
   acts: Act.Act[];
@@ -43,12 +43,12 @@ export class Factory {
   }
 }
 
-export { Build } from "./Build";
-export { Claim } from "./Claim";
-export { Harvest } from "./Harvest";
-export { Idle } from "./Idle";
-export { RECYCLE, Recycle } from "./Recycle";
-export { RENEW, Renew, THRESHOLD } from "./Renew";
-export { Repair } from "./Repair";
-export { Transfer } from "./Transfer";
-export { Upgrade } from "./Upgrade";
+export { Build } from "./build";
+export { Claim } from "./claim";
+export { Harvest } from "./harvest";
+export { Idle } from "./idle";
+export { RECYCLE, Recycle } from "./recycle";
+export { RENEW, Renew, THRESHOLD } from "./renew";
+export { Repair } from "./repair";
+export { Transfer } from "./transfer";
+export { Upgrade } from "./upgrade";

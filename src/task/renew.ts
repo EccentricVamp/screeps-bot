@@ -1,6 +1,6 @@
-import * as Act from "Act/Act";
-import { moveTo, setStatus } from "Creep";
-import { Task } from "./Task";
+import * as Act from "act/act";
+import { moveTo, setStatus } from "creep";
+import { Task } from "./task";
 
 export const RENEW = 99;
 export const THRESHOLD = 500;

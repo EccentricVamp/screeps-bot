@@ -1,4 +1,4 @@
-import { GenericAct } from "./Act";
+import { GenericAct } from "./act";
 
 export type BuildReturnCode = CreepActionReturnCode | ERR_NOT_ENOUGH_ENERGY | ERR_RCL_NOT_ENOUGH;
 

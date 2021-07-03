@@ -1,4 +1,4 @@
-import { GenericAct } from "./Act";
+import { GenericAct } from "./act";
 
 export type Transferable = Creep | Structure;
 

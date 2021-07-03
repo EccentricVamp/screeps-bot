@@ -1,4 +1,4 @@
-import { GenericAct } from "./Act";
+import { GenericAct } from "./act";
 
 export class Upgrade implements GenericAct<StructureController> {
   public parts = [MOVE, CARRY, WORK];

@@ -1,6 +1,6 @@
-import * as Act from "Act/Act";
-import { getStatus, moveTo, setStatus } from "Creep";
-import { Task } from "./Task";
+import * as Act from "act/act";
+import { getStatus, moveTo, setStatus } from "creep";
+import { Task } from "./task";
 
 export class Harvest implements Task {
   public acts: Act.Act[];

@@ -1,6 +1,6 @@
-import * as Act from "Act/Act";
-import { Task } from "./Task";
-import { moveTo } from "Creep";
+import * as Act from "act/act";
+import { Task } from "./task";
+import { moveTo } from "creep";
 
 export class Claim implements Task {
   public acts: Act.Act[];

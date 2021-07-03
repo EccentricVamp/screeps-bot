@@ -1,21 +1,21 @@
-import * as Act from "Act/Act";
-import { getStatus, moveTo, setStatus } from "Creep";
-import { Task } from "./Task";
+import * as Act from "act/act";
+import { getStatus, moveTo, setStatus } from "creep";
+import { Task } from "./task";
 
-export class Upgrade implements Task {
+export class Build implements Task {
   public acts: Act.Act[];
   public parts: BodyPartConstant[];
 
-  public constructor(upgrade: Act.Upgrade, energize: Act.Collect) {
-    this.acts = [upgrade, energize];
+  public constructor(build: Act.Build, energize: Act.Harvest | Act.Pickup | Act.Withdraw) {
+    this.acts = [build, energize];
     this.parts = Act.getParts(this.acts);
   }
 
-  public perform(creep: Creep): boolean {
-    const UPGRADE = 0;
+  public perform(creep: Creep): void {
+    const BUILD = 0;
     const ENERGIZE = 1;
 
-    const status = getStatus(creep, [UPGRADE, ENERGIZE]);
+    const status = getStatus(creep, [BUILD, ENERGIZE]);
     const act = this.acts[status];
 
     switch (act.execute(creep)) {
@@ -26,12 +26,10 @@ export class Upgrade implements Task {
         setStatus(creep, ENERGIZE);
         break;
       case ERR_FULL:
-        setStatus(creep, UPGRADE);
+        setStatus(creep, BUILD);
         break;
       default:
         break;
     }
-
-    return false;
   }
 }

@@ -1,7 +1,7 @@
-import * as Act from "Act/Act";
-import * as Creep from "Creep";
-import * as Filter from "Filter";
-import * as Task from "Task/Task";
+import * as Act from "act/act";
+import * as Creep from "creep";
+import * as Filter from "filter";
+import * as Task from "task/task";
 import _ from "lodash";
 
 declare global {

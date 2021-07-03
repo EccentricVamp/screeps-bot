@@ -1,6 +1,6 @@
-import { Harvest } from "./Harvest";
-import { Pickup } from "./Pickup";
-import { Withdraw } from "./Withdraw";
+import { Harvest } from "./harvest";
+import { Pickup } from "./pickup";
+import { Withdraw } from "./withdraw";
 import _ from "lodash";
 
 /** Represents an abstraction of some "action" a creep can do. */
@@ -25,13 +25,13 @@ export function getParts(acts: Act[]): BodyPartConstant[] {
 
 export type Collect = Harvest | Pickup | Withdraw;
 
-export { Build } from "./Build";
-export { Claim } from "./Claim";
-export { Harvest, Harvestable } from "./Harvest";
-export { Pickup } from "./Pickup";
-export { Recycle } from "./Recycle";
-export { Renew } from "./Renew";
-export { Repair } from "./Repair";
-export { Transfer, Transferable } from "./Transfer";
-export { Upgrade } from "./Upgrade";
-export { Withdraw, Withdrawable } from "./Withdraw";
+export { Build } from "./build";
+export { Claim } from "./claim";
+export { Harvest, Harvestable } from "./harvest";
+export { Pickup } from "./pickup";
+export { Recycle } from "./recycle";
+export { Renew } from "./renew";
+export { Repair } from "./repair";
+export { Transfer, Transferable } from "./transfer";
+export { Upgrade } from "./upgrade";
+export { Withdraw, Withdrawable } from "./withdraw";

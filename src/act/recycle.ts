@@ -1,4 +1,4 @@
-import { GenericAct } from "./Act";
+import { GenericAct } from "./act";
 
 export class Recycle implements GenericAct<StructureSpawn> {
   public parts = [];
