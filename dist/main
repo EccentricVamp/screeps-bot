@@ -1,10 +1,10 @@
 'use strict';
 
 var _ = require('lodash');
-var Act = require('./Act.js');
-var Creep = require('./Creep.js');
-var Filter = require('./Filter.js');
-var Task = require('./Task.js');
+var act = require('./act');
+var creep = require('./creep');
+var filter = require('./filter');
+var task = require('./task');
 
 function maintain(room) {
     const spawns = room.find(FIND_MY_SPAWNS);
@@ -14,11 +14,11 @@ function maintain(room) {
     const controller = room.controller;
     if (spawns.length > 0) {
         const spawn = spawns[0];
-        const recycle = Task.Factory.Recycle(spawn);
-        const renew = Task.Factory.Renew(spawn);
+        const recycle = task.Factory.Recycle(spawn);
+        const renew = task.Factory.Renew(spawn);
         for (const creep of creeps) {
             const status = creep.memory.status;
-            if (status === Task.RECYCLE) {
+            if (status === task.RECYCLE) {
                 recycle.perform(creep);
                 _['default'].pull(creeps, creep);
                 continue;
@@ -29,7 +29,7 @@ function maintain(room) {
             // Ignore spawning creeps
             if (creep.ticksToLive === undefined)
                 continue;
-            if (creep.ticksToLive < Task.THRESHOLD || status === Task.RENEW) {
+            if (creep.ticksToLive < task.THRESHOLD || status === task.RENEW) {
                 renew.perform(creep);
                 if (creep.memory.status !== null)
                     _['default'].pull(creeps, creep);
@@ -38,26 +38,26 @@ function maintain(room) {
     }
     const tasks = new Array();
     if (controller !== undefined && !controller.my) {
-        tasks.push(Task.Factory.Claim(controller));
+        tasks.push(task.Factory.Claim(controller));
     }
-    const energyNeeds = structures.filter(Filter.needsEnergy);
-    const energyStores = structures.filter(Filter.hasEnergy);
-    const energyResources = resources.filter(Filter.isEnergy);
+    const energyNeeds = structures.filter(filter.needsEnergy);
+    const energyStores = structures.filter(filter.hasEnergy);
+    const energyResources = resources.filter(filter.isEnergy);
     const energySources = room.find(FIND_SOURCES_ACTIVE);
     if (energyNeeds.length > 0) {
         const need = energyNeeds[0];
         const collect = findEnergy(energyResources, energyStores, energySources);
         if (collect !== null) {
-            tasks.push(Task.Factory.Transfer(need, collect));
+            tasks.push(task.Factory.Transfer(need, collect));
         }
     }
-    const energyCapacity = structures.filter(Filter.hasCapacity);
+    const energyCapacity = structures.filter(filter.hasCapacity);
     if (energyCapacity.length > 0) {
         const capacity = energyCapacity[0];
         const source = _['default'].first(_['default'].sortBy(energySources, s => s.pos.getRangeTo(capacity)));
         if (source !== undefined) {
             _['default'].pull(energySources, source);
-            tasks.push(Task.Factory.Harvest(source, capacity));
+            tasks.push(task.Factory.Harvest(source, capacity));
         }
     }
     const sites = room.find(FIND_CONSTRUCTION_SITES);
@@ -65,7 +65,7 @@ function maintain(room) {
         const site = sites[0];
         const collect = findEnergy(energyResources, energyStores, energySources);
         if (collect !== null) {
-            tasks.push(Task.Factory.Build(site, collect));
+            tasks.push(task.Factory.Build(site, collect));
         }
     }
     for (const task of tasks) {
@@ -77,7 +77,7 @@ function maintain(room) {
         _['default'].pull(creeps, creep);
         task.perform(creep);
     }
-    const idle = Task.Factory.Idle(Game.flags.Idle);
+    const idle = task.Factory.Idle(Game.flags.Idle);
     for (const creep of creeps) {
         idle.perform(creep);
     }
@@ -86,7 +86,7 @@ function maintain(room) {
 function evaluate(creeps, task) {
     const parts = task.parts;
     const evaluations = creeps
-        .map(creep => new Creep.Evaluation(creep, parts))
+        .map(creep$1 => new creep.Evaluation(creep$1, parts))
         .filter(evaluation => evaluation.eligible)
         .sort((a, b) => a.score - b.score);
     return evaluations[evaluations.length - 1].creep;
@@ -94,15 +94,15 @@ function evaluate(creeps, task) {
 function findEnergy(resources, stores, sources) {
     if (resources.length > 0) {
         const resource = resources.pop();
-        return new Act.Pickup(resource);
+        return new act.Pickup(resource);
     }
     else if (stores.length > 0) {
         const store = stores.pop();
-        return new Act.Withdraw(store);
+        return new act.Withdraw(store);
     }
     else if (sources.length > 0) {
         const source = sources.pop();
-        return new Act.Harvest(source);
+        return new act.Harvest(source);
     }
     else
         return null;

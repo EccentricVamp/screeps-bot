@@ -1,28 +1,28 @@
 'use strict';
 
 require('lodash');
-var Act = require('./Act.js');
-var Creep = require('./Creep.js');
+var act = require('./act');
+var creep = require('./creep');
 
 class Build {
     constructor(build, energize) {
         this.acts = [build, energize];
-        this.parts = Act.getParts(this.acts);
+        this.parts = act.getParts(this.acts);
     }
-    perform(creep) {
+    perform(creep$1) {
         const BUILD = 0;
         const ENERGIZE = 1;
-        const status = Creep.getStatus(creep, [BUILD, ENERGIZE]);
+        const status = creep.getStatus(creep$1, [BUILD, ENERGIZE]);
         const act = this.acts[status];
-        switch (act.execute(creep)) {
+        switch (act.execute(creep$1)) {
             case ERR_NOT_IN_RANGE:
-                Creep.moveTo(creep, act.target);
+                creep.moveTo(creep$1, act.target);
                 break;
             case ERR_NOT_ENOUGH_ENERGY:
-                Creep.setStatus(creep, ENERGIZE);
+                creep.setStatus(creep$1, ENERGIZE);
                 break;
             case ERR_FULL:
-                Creep.setStatus(creep, BUILD);
+                creep.setStatus(creep$1, BUILD);
                 break;
         }
     }
@@ -31,14 +31,14 @@ class Build {
 class Claim {
     constructor(claim) {
         this.acts = [claim];
-        this.parts = Act.getParts(this.acts);
+        this.parts = act.getParts(this.acts);
     }
-    perform(creep) {
+    perform(creep$1) {
         const CLAIM = 0;
         const act = this.acts[CLAIM];
-        switch (act.execute(creep)) {
+        switch (act.execute(creep$1)) {
             case ERR_NOT_IN_RANGE:
-                Creep.moveTo(creep, act.target);
+                creep.moveTo(creep$1, act.target);
                 break;
         }
     }
@@ -49,20 +49,20 @@ class Harvest {
         this.parts = [WORK, WORK, WORK, CARRY, MOVE];
         this.acts = [harvest, transfer];
     }
-    perform(creep) {
+    perform(creep$1) {
         const HARVEST = 0;
         const TRANSFER = 1;
-        const status = Creep.getStatus(creep, [HARVEST, TRANSFER]);
+        const status = creep.getStatus(creep$1, [HARVEST, TRANSFER]);
         const act = this.acts[status];
-        switch (act.execute(creep)) {
+        switch (act.execute(creep$1)) {
             case ERR_NOT_IN_RANGE:
-                Creep.moveTo(creep, act.target);
+                creep.moveTo(creep$1, act.target);
                 break;
             case ERR_NOT_ENOUGH_RESOURCES:
-                Creep.setStatus(creep, HARVEST);
+                creep.setStatus(creep$1, HARVEST);
                 break;
             case ERR_FULL:
-                Creep.setStatus(creep, TRANSFER);
+                creep.setStatus(creep$1, TRANSFER);
                 break;
         }
     }
@@ -85,12 +85,12 @@ class Recycle {
         this.parts = [];
         this.acts = [recycle];
     }
-    perform(creep) {
-        Creep.setStatus(creep, RECYCLE);
+    perform(creep$1) {
+        creep.setStatus(creep$1, RECYCLE);
         const act = this.acts[0];
-        switch (act.execute(creep)) {
+        switch (act.execute(creep$1)) {
             case ERR_NOT_IN_RANGE:
-                Creep.moveTo(creep, act.target);
+                creep.moveTo(creep$1, act.target);
                 break;
         }
     }
@@ -103,15 +103,15 @@ class Renew {
         this.parts = [];
         this.acts = [renew];
     }
-    perform(creep) {
-        Creep.setStatus(creep, RENEW);
+    perform(creep$1) {
+        creep.setStatus(creep$1, RENEW);
         const act = this.acts[0];
-        switch (act.execute(creep)) {
+        switch (act.execute(creep$1)) {
             case ERR_NOT_IN_RANGE:
-                Creep.moveTo(creep, act.target);
+                creep.moveTo(creep$1, act.target);
                 break;
             case ERR_FULL:
-                Creep.setStatus(creep, null);
+                creep.setStatus(creep$1, null);
                 break;
         }
     }
@@ -120,22 +120,22 @@ class Renew {
 class Transfer {
     constructor(transfer, collect) {
         this.acts = [transfer, collect];
-        this.parts = Act.getParts(this.acts);
+        this.parts = act.getParts(this.acts);
     }
-    perform(creep) {
+    perform(creep$1) {
         const TRANSFER = 0;
         const COLLECT = 1;
-        const status = Creep.getStatus(creep, [TRANSFER, COLLECT]);
+        const status = creep.getStatus(creep$1, [TRANSFER, COLLECT]);
         const act = this.acts[status];
-        switch (act.execute(creep)) {
+        switch (act.execute(creep$1)) {
             case ERR_NOT_IN_RANGE:
-                Creep.moveTo(creep, act.target);
+                creep.moveTo(creep$1, act.target);
                 break;
             case ERR_NOT_ENOUGH_RESOURCES:
-                Creep.setStatus(creep, COLLECT);
+                creep.setStatus(creep$1, COLLECT);
                 break;
             case ERR_FULL:
-                Creep.setStatus(creep, TRANSFER);
+                creep.setStatus(creep$1, TRANSFER);
                 break;
         }
     }
@@ -144,22 +144,22 @@ class Transfer {
 class Repair {
     constructor(repair, energize) {
         this.acts = [repair, energize];
-        this.parts = Act.getParts(this.acts);
+        this.parts = act.getParts(this.acts);
     }
-    perform(creep) {
+    perform(creep$1) {
         const REPAIR = 0;
         const ENERGIZE = 1;
-        const status = Creep.getStatus(creep, [REPAIR, ENERGIZE]);
+        const status = creep.getStatus(creep$1, [REPAIR, ENERGIZE]);
         const act = this.acts[status];
-        switch (act.execute(creep)) {
+        switch (act.execute(creep$1)) {
             case ERR_NOT_IN_RANGE:
-                Creep.moveTo(creep, act.target);
+                creep.moveTo(creep$1, act.target);
                 break;
             case ERR_NOT_ENOUGH_ENERGY:
-                Creep.setStatus(creep, ENERGIZE);
+                creep.setStatus(creep$1, ENERGIZE);
                 break;
             case ERR_FULL:
-                Creep.setStatus(creep, REPAIR);
+                creep.setStatus(creep$1, REPAIR);
                 break;
         }
     }
@@ -168,22 +168,22 @@ class Repair {
 class Upgrade {
     constructor(upgrade, energize) {
         this.acts = [upgrade, energize];
-        this.parts = Act.getParts(this.acts);
+        this.parts = act.getParts(this.acts);
     }
-    perform(creep) {
+    perform(creep$1) {
         const UPGRADE = 0;
         const ENERGIZE = 1;
-        const status = Creep.getStatus(creep, [UPGRADE, ENERGIZE]);
+        const status = creep.getStatus(creep$1, [UPGRADE, ENERGIZE]);
         const act = this.acts[status];
-        switch (act.execute(creep)) {
+        switch (act.execute(creep$1)) {
             case ERR_NOT_IN_RANGE:
-                Creep.moveTo(creep, act.target);
+                creep.moveTo(creep$1, act.target);
                 break;
             case ERR_NOT_ENOUGH_ENERGY:
-                Creep.setStatus(creep, ENERGIZE);
+                creep.setStatus(creep$1, ENERGIZE);
                 break;
             case ERR_FULL:
-                Creep.setStatus(creep, UPGRADE);
+                creep.setStatus(creep$1, UPGRADE);
                 break;
         }
         return false;
@@ -192,25 +192,25 @@ class Upgrade {
 
 class Factory {
     static Build(site, collect) {
-        return new Build(new Act.Build(site), collect);
+        return new Build(new act.Build(site), collect);
     }
     static Claim(controller) {
-        return new Claim(new Act.Claim(controller));
+        return new Claim(new act.Claim(controller));
     }
     static Harvest(target, store) {
-        return new Harvest(new Act.Harvest(target), new Act.Transfer(store));
+        return new Harvest(new act.Harvest(target), new act.Transfer(store));
     }
     static Idle(target) {
         return new Idle(target.pos);
     }
     static Recycle(spawn) {
-        return new Recycle(new Act.Recycle(spawn));
+        return new Recycle(new act.Recycle(spawn));
     }
     static Renew(spawn) {
-        return new Renew(new Act.Renew(spawn));
+        return new Renew(new act.Renew(spawn));
     }
     static Transfer(target, collect) {
-        return new Transfer(new Act.Transfer(target), collect);
+        return new Transfer(new act.Transfer(target), collect);
     }
 }
 
