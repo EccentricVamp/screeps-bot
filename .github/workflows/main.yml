@@ -8,4 +8,4 @@ jobs:
       - uses: EccentricVamp/screeps-action@6d0779bd07b6592d3526ed6467e1683f70021d6a
         with:
           token: ${{ secrets.AUTH_TOKEN }}
-          # branch: ${{ github.ref }}
+          branch: ${{ github.ref }}
