@@ -1,14 +1,12 @@
-import * as Act from "Act/Act";
-import { RECYCLING, Recycle } from "Task/Recycle";
-import { RENEWING, Renew, THRESHOLD } from "Task/Renew";
+import { Harvest as ActHarvest, Harvestable } from "Act/Harvest";
+import { Withdraw as ActWithdraw, Withdrawable } from "Act/Withdraw";
+import { RENEW, THRESHOLD } from "Task/Renew";
 import { hasCapacity, hasEnergy, isEnergy, needsEnergy } from "Filters";
-import { Build } from "Task/Build";
-import { Claim } from "Task/Claim";
+import { Pickup as ActPickup } from "Act/Pickup";
 import { Evaluation } from "Evaluation";
-import { Harvest } from "Task/Harvest";
-import { Idle } from "Task/Idle";
+import { RECYCLE } from "Task/Recycle";
 import { Task } from "Task/Task";
-import { Transfer } from "Task/Transfer";
+import { Factory as TaskFactory } from "Task/Factory";
 import _ from "lodash";
 
 export class Maintainer {
@@ -21,12 +19,12 @@ export class Maintainer {
 
     if (spawns.length > 0) {
       const spawn = spawns[0];
-      const recycle = new Recycle(new Act.Recycle(spawn));
-      const renew = new Renew(new Act.Renew(spawn));
+      const recycle = TaskFactory.Recycle(spawn);
+      const renew = TaskFactory.Renew(spawn);
       for (const creep of creeps) {
         const status = creep.memory.status;
 
-        if (status === RECYCLING) {
+        if (status === RECYCLE) {
           recycle.perform(creep);
           _.pull(creeps, creep);
           continue;
@@ -37,9 +35,9 @@ export class Maintainer {
         // Ignore spawning creeps
         if (creep.ticksToLive === undefined) continue;
 
-        if (creep.ticksToLive < THRESHOLD || status === RENEWING) {
-          if (renew.perform(creep)) creep.memory.status = null;
-          else _.pull(creeps, creep);
+        if (creep.ticksToLive < THRESHOLD || status === RENEW) {
+          renew.perform(creep);
+          if (creep.memory.status !== null) _.pull(creeps, creep);
         }
       }
     }
@@ -47,8 +45,7 @@ export class Maintainer {
     const tasks = new Array<Task>();
 
     if (controller !== undefined && !controller.my) {
-      const act = new Act.Claim(controller);
-      tasks.push(new Claim(act));
+      tasks.push(TaskFactory.Claim(controller));
     }
 
     const energyNeeds = structures.filter(needsEnergy);
@@ -60,19 +57,18 @@ export class Maintainer {
 
       let collect;
       if (energyResources.length > 0) {
-        const resource = energyResources.pop() ?? energyResources[0];
-        collect = new Act.Pickup(resource);
+        const resource = energyResources.pop() as Resource;
+        collect = new ActPickup(resource);
       } else if (energyStores.length > 0) {
-        const store = energyStores.pop() ?? energyStores[0];
-        collect = new Act.Withdraw(store);
+        const store = energyStores.pop() as Withdrawable;
+        collect = new ActWithdraw(store);
       } else if (energySources.length > 0) {
-        const source = energySources.pop() ?? energySources[0];
-        collect = new Act.Harvest(source);
+        const source = energySources.pop() as Harvestable;
+        collect = new ActHarvest(source);
       }
 
       if (collect !== undefined) {
-        const transfer = new Act.Transfer(need);
-        tasks.push(new Transfer(transfer, collect));
+        tasks.push(TaskFactory.Transfer(need, collect));
       }
     }
 
@@ -82,9 +78,7 @@ export class Maintainer {
       const source = _.first(_.sortBy(energySources, s => s.pos.getRangeTo(capacity)));
       if (source !== undefined) {
         _.pull(energySources, source);
-        const harvest = new Act.Harvest(source);
-        const transfer = new Act.Transfer(capacity);
-        tasks.push(new Harvest(harvest, transfer));
+        tasks.push(TaskFactory.Harvest(source, capacity));
       }
     }
 
@@ -95,18 +89,17 @@ export class Maintainer {
       let collect;
       if (energyResources.length > 0) {
         const resource = energyResources.pop() ?? energyResources[0];
-        collect = new Act.Pickup(resource);
+        collect = new ActPickup(resource);
       } else if (energyStores.length > 0) {
         const store = energyStores.pop() ?? energyStores[0];
-        collect = new Act.Withdraw(store);
+        collect = new ActWithdraw(store);
       } else if (energySources.length > 0) {
         const source = energySources.pop() ?? energySources[0];
-        collect = new Act.Harvest(source);
+        collect = new ActHarvest(source);
       }
 
       if (collect !== undefined) {
-        const build = new Act.Build(site);
-        tasks.push(new Build(build, collect));
+        tasks.push(TaskFactory.Build(site, collect));
       }
     }
 
@@ -120,24 +113,19 @@ export class Maintainer {
       task.perform(creep);
     }
 
-    Maintainer.idle(creeps);
+    const idle = TaskFactory.Idle(Game.flags.Idle);
+    for (const creep of creeps) {
+      idle.perform(creep);
+    }
   }
 
   /** Get the best creep for a given task. */
   private static evaluate(creeps: Creep[], task: Task): Creep | undefined {
-    const parts = Act.getParts(task.acts);
+    const parts = task.parts;
     const evaluations = creeps
       .map(creep => new Evaluation(creep, parts))
       .filter(evaluation => evaluation.eligible)
       .sort((a, b) => a.score - b.score);
     return evaluations[evaluations.length - 1].creep;
-  }
-
-  /** Perform an idle task for each creep. */
-  private static idle(creeps: Creep[]) {
-    const idle = new Idle(Game.flags.Idle.pos);
-    for (const creep of creeps) {
-      idle.perform(creep);
-    }
   }
 }
