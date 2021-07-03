@@ -1,5 +1,6 @@
 {
     "[javascript]": {
+
         "editor.formatOnSave": false
     },
     "[json]": {
@@ -13,6 +14,9 @@
     },
     "editor.formatOnSave": true,
     "editor.renderWhitespace": "boundary",
+    "files.associations": {
+        "**/dist/*": "javascript"
+    },
     "files.encoding": "utf8",
     "files.exclude": {
         "**/.git": true,
@@ -27,6 +31,5 @@
         "node_modules/**": true,
         "typings/**": true
     },
-    "typescript.tsdk": "./node_modules/typescript/lib",
-    "eslint.enable": true
+    "typescript.tsdk": "./node_modules/typescript/lib"
 }
