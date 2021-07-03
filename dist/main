@@ -1,6 +1,6 @@
 'use strict';
 
-var _ = require('lodash');
+var lodash = require('lodash');
 var act = require('./act');
 var creep = require('./creep');
 var filter = require('./filter');
@@ -20,7 +20,7 @@ function maintain(room) {
             const status = creep.memory.status;
             if (status === task.RECYCLE) {
                 recycle.perform(creep);
-                _['default'].pull(creeps, creep);
+                lodash.pull(creeps, creep);
                 continue;
             }
             // Ignore creeps with CLAIM parts
@@ -32,7 +32,7 @@ function maintain(room) {
             if (creep.ticksToLive < task.THRESHOLD || status === task.RENEW) {
                 renew.perform(creep);
                 if (creep.memory.status !== null)
-                    _['default'].pull(creeps, creep);
+                    lodash.pull(creeps, creep);
             }
         }
     }
@@ -54,9 +54,9 @@ function maintain(room) {
     const energyCapacity = structures.filter(filter.hasCapacity);
     if (energyCapacity.length > 0) {
         const capacity = energyCapacity[0];
-        const source = _['default'].first(_['default'].sortBy(energySources, s => s.pos.getRangeTo(capacity)));
+        const source = lodash.first(lodash.sortBy(energySources, s => s.pos.getRangeTo(capacity)));
         if (source !== undefined) {
-            _['default'].pull(energySources, source);
+            lodash.pull(energySources, source);
             tasks.push(task.Factory.Harvest(source, capacity));
         }
     }
@@ -74,7 +74,7 @@ function maintain(room) {
         const creep = evaluate(creeps, task);
         if (creep === undefined)
             continue;
-        _['default'].pull(creeps, creep);
+        lodash.pull(creeps, creep);
         task.perform(creep);
     }
     const idle = task.Factory.Idle(Game.flags.Idle);

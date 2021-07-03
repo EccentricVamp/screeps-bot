@@ -2,7 +2,7 @@ import * as Act from "act/act";
 import * as Creep from "creep";
 import * as Filter from "filter";
 import * as Task from "task/task";
-import _ from "lodash";
+import { first, pull, sortBy } from "lodash";
 
 declare global {
   interface CreepMemory {
@@ -30,7 +30,7 @@ function maintain(room: Room): void {
 
       if (status === Task.RECYCLE) {
         recycle.perform(creep);
-        _.pull(creeps, creep);
+        pull(creeps, creep);
         continue;
       }
 
@@ -41,7 +41,7 @@ function maintain(room: Room): void {
 
       if (creep.ticksToLive < Task.THRESHOLD || status === Task.RENEW) {
         renew.perform(creep);
-        if (creep.memory.status !== null) _.pull(creeps, creep);
+        if (creep.memory.status !== null) pull(creeps, creep);
       }
     }
   }
@@ -68,9 +68,9 @@ function maintain(room: Room): void {
   const energyCapacity = structures.filter(Filter.hasCapacity);
   if (energyCapacity.length > 0) {
     const capacity = energyCapacity[0];
-    const source = _.first(_.sortBy(energySources, s => s.pos.getRangeTo(capacity)));
+    const source = first(sortBy(energySources, s => s.pos.getRangeTo(capacity)));
     if (source !== undefined) {
-      _.pull(energySources, source);
+      pull(energySources, source);
       tasks.push(Task.Factory.Harvest(source, capacity));
     }
   }
@@ -91,7 +91,7 @@ function maintain(room: Room): void {
     const creep = evaluate(creeps, task);
     if (creep === undefined) continue;
 
-    _.pull(creeps, creep);
+    pull(creeps, creep);
     task.perform(creep);
   }
 

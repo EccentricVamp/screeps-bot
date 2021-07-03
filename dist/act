@@ -1,6 +1,6 @@
 'use strict';
 
-var _ = require('lodash');
+var lodash = require('lodash');
 
 class Build {
     constructor(target) {
@@ -124,7 +124,7 @@ class Withdraw {
 /** Returns the union of the parts required for each act */
 function getParts(acts) {
     const actParts = acts.map(a => a.parts);
-    return _['default'].union(...actParts);
+    return lodash.union(...actParts);
 }
 
 exports.Build = Build;

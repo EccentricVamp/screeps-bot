@@ -1,4 +1,4 @@
-import _ from "lodash";
+import { countBy } from "lodash";
 
 export type MoveToReturnCode =
   | CreepMoveReturnCode
@@ -35,7 +35,7 @@ export class Evaluation {
   public constructor(creep: Creep, parts: BodyPartConstant[]) {
     this.creep = creep;
 
-    const partCounts = _.countBy(getParts(creep));
+    const partCounts = countBy(getParts(creep));
     for (const part of parts) {
       const count = partCounts[part];
       if (count === 0) {

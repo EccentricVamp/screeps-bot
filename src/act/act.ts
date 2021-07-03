@@ -1,7 +1,7 @@
 import { Harvest } from "./harvest";
 import { Pickup } from "./pickup";
 import { Withdraw } from "./withdraw";
-import _ from "lodash";
+import { union } from "lodash";
 
 /** Represents an abstraction of some "action" a creep can do. */
 export interface Act {
@@ -20,7 +20,7 @@ export interface GenericAct<Target extends { pos: RoomPosition }> extends Act {
 /** Returns the union of the parts required for each act */
 export function getParts(acts: Act[]): BodyPartConstant[] {
   const actParts = acts.map(a => a.parts);
-  return _.union(...actParts);
+  return union(...actParts);
 }
 
 export type Collect = Harvest | Pickup | Withdraw;
