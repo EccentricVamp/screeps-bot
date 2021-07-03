@@ -1,12 +1,7 @@
-import { ActCollect, Factory as TaskFactory } from "Task/Factory";
-import { Harvest as ActHarvest, Harvestable } from "Act/Harvest";
-import { Withdraw as ActWithdraw, Withdrawable } from "Act/Withdraw";
-import { RENEW, THRESHOLD } from "Task/Renew";
+import * as Act from "Act/Act";
+import * as Task from "Task/Task";
 import { hasCapacity, hasEnergy, isEnergy, needsEnergy } from "Filters";
-import { Pickup as ActPickup } from "Act/Pickup";
 import { Evaluation } from "Evaluation";
-import { RECYCLE } from "Task/Recycle";
-import { Task } from "Task/Task";
 import _ from "lodash";
 
 export class Maintainer {
@@ -19,12 +14,12 @@ export class Maintainer {
 
     if (spawns.length > 0) {
       const spawn = spawns[0];
-      const recycle = TaskFactory.Recycle(spawn);
-      const renew = TaskFactory.Renew(spawn);
+      const recycle = Task.Factory.Recycle(spawn);
+      const renew = Task.Factory.Renew(spawn);
       for (const creep of creeps) {
         const status = creep.memory.status;
 
-        if (status === RECYCLE) {
+        if (status === Task.RECYCLE) {
           recycle.perform(creep);
           _.pull(creeps, creep);
           continue;
@@ -35,17 +30,17 @@ export class Maintainer {
         // Ignore spawning creeps
         if (creep.ticksToLive === undefined) continue;
 
-        if (creep.ticksToLive < THRESHOLD || status === RENEW) {
+        if (creep.ticksToLive < Task.THRESHOLD || status === Task.RENEW) {
           renew.perform(creep);
           if (creep.memory.status !== null) _.pull(creeps, creep);
         }
       }
     }
 
-    const tasks = new Array<Task>();
+    const tasks = new Array<Task.Task>();
 
     if (controller !== undefined && !controller.my) {
-      tasks.push(TaskFactory.Claim(controller));
+      tasks.push(Task.Factory.Claim(controller));
     }
 
     const energyNeeds = structures.filter(needsEnergy);
@@ -57,7 +52,7 @@ export class Maintainer {
       const collect = Maintainer.findEnergy(energyResources, energyStores, energySources);
 
       if (collect !== null) {
-        tasks.push(TaskFactory.Transfer(need, collect));
+        tasks.push(Task.Factory.Transfer(need, collect));
       }
     }
 
@@ -67,7 +62,7 @@ export class Maintainer {
       const source = _.first(_.sortBy(energySources, s => s.pos.getRangeTo(capacity)));
       if (source !== undefined) {
         _.pull(energySources, source);
-        tasks.push(TaskFactory.Harvest(source, capacity));
+        tasks.push(Task.Factory.Harvest(source, capacity));
       }
     }
 
@@ -77,7 +72,7 @@ export class Maintainer {
       const collect = Maintainer.findEnergy(energyResources, energyStores, energySources);
 
       if (collect !== null) {
-        tasks.push(TaskFactory.Build(site, collect));
+        tasks.push(Task.Factory.Build(site, collect));
       }
     }
 
@@ -91,14 +86,14 @@ export class Maintainer {
       task.perform(creep);
     }
 
-    const idle = TaskFactory.Idle(Game.flags.Idle);
+    const idle = Task.Factory.Idle(Game.flags.Idle);
     for (const creep of creeps) {
       idle.perform(creep);
     }
   }
 
   /** Get the best creep for a given task. */
-  private static evaluate(creeps: Creep[], task: Task): Creep | undefined {
+  private static evaluate(creeps: Creep[], task: Task.Task): Creep | undefined {
     const parts = task.parts;
     const evaluations = creeps
       .map(creep => new Evaluation(creep, parts))
@@ -111,16 +106,16 @@ export class Maintainer {
     resources: Resource<RESOURCE_ENERGY>[],
     stores: (StructureContainer | StructureStorage)[],
     sources: Source[]
-  ): ActCollect | null {
+  ): Act.Collect | null {
     if (resources.length > 0) {
       const resource = resources.pop() as Resource;
-      return new ActPickup(resource);
+      return new Act.Pickup(resource);
     } else if (stores.length > 0) {
-      const store = stores.pop() as Withdrawable;
-      return new ActWithdraw(store);
+      const store = stores.pop() as Act.Withdrawable;
+      return new Act.Withdraw(store);
     } else if (sources.length > 0) {
-      const source = sources.pop() as Harvestable;
-      return new ActHarvest(source);
+      const source = sources.pop() as Act.Harvestable;
+      return new Act.Harvest(source);
     } else return null;
   }
 }

@@ -1,17 +1,16 @@
-import { Act, getParts } from "Act/Act";
-import { Claim as ActClaim } from "Act/Claim";
+import * as Act from "Act/Act";
 import { Task } from "./Task";
 import { moveTo } from "Creep";
 
 export const CLAIM = 0;
 
 export class Claim implements Task {
-  public acts: Act[];
+  public acts: Act.Act[];
   public parts: BodyPartConstant[];
 
-  public constructor(claim: ActClaim) {
+  public constructor(claim: Act.Claim) {
     this.acts = [claim];
-    this.parts = getParts(this.acts);
+    this.parts = Act.getParts(this.acts);
   }
 
   public perform(creep: Creep): void {

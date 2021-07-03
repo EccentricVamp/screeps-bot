@@ -1,21 +1,17 @@
-import { Act, getParts } from "Act/Act";
+import * as Act from "Act/Act";
 import { getStatus, moveTo, setStatus } from "Creep";
-import { Build as ActBuild } from "Act/Build";
-import { Harvest as ActHarvest } from "Act/Harvest";
-import { Pickup as ActPickup } from "Act/Pickup";
-import { Withdraw as ActWithdraw } from "Act/Withdraw";
 import { Task } from "./Task";
 
 export const BUILD = 0;
 export const ENERGIZE = 1;
 
 export class Build implements Task {
-  public acts: Act[];
+  public acts: Act.Act[];
   public parts: BodyPartConstant[];
 
-  public constructor(build: ActBuild, energize: ActHarvest | ActPickup | ActWithdraw) {
+  public constructor(build: Act.Build, energize: Act.Harvest | Act.Pickup | Act.Withdraw) {
     this.acts = [build, energize];
-    this.parts = getParts(this.acts);
+    this.parts = Act.getParts(this.acts);
   }
 
   public perform(creep: Creep): void {

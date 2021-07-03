@@ -1,15 +1,14 @@
+import * as Act from "Act/Act";
 import { moveTo, setStatus } from "Creep";
-import { Act } from "Act/Act";
-import { Recycle as ActRecycle } from "Act/Recycle";
 import { Task } from "./Task";
 
 export const RECYCLE = 98;
 
 export class Recycle implements Task {
-  public acts: Act[];
+  public acts: Act.Act[];
   public parts = [];
 
-  public constructor(recycle: ActRecycle) {
+  public constructor(recycle: Act.Recycle) {
     this.acts = [recycle];
   }
 

@@ -1,21 +1,17 @@
-import { Act, getParts } from "Act/Act";
+import * as Act from "Act/Act";
 import { getStatus, moveTo, setStatus } from "Creep";
-import { Harvest as ActHarvest } from "Act/Harvest";
-import { Pickup as ActPickup } from "Act/Pickup";
-import { Upgrade as ActUpgrade } from "Act/Upgrade";
-import { Withdraw as ActWithdraw } from "Act/Withdraw";
 import { Task } from "./Task";
 
 export const UPGRADE = 0;
 export const ENERGIZE = 1;
 
 export class Upgrade implements Task {
-  public acts: Act[];
+  public acts: Act.Act[];
   public parts: BodyPartConstant[];
 
-  public constructor(upgrade: ActUpgrade, energize: ActHarvest | ActPickup | ActWithdraw) {
+  public constructor(upgrade: Act.Upgrade, energize: Act.Collect) {
     this.acts = [upgrade, energize];
-    this.parts = getParts(this.acts);
+    this.parts = Act.getParts(this.acts);
   }
 
   public perform(creep: Creep): boolean {

@@ -1,21 +1,17 @@
-import { Act, getParts } from "Act/Act";
+import * as Act from "Act/Act";
 import { getStatus, moveTo, setStatus } from "Creep";
-import { Harvest as ActHarvest } from "Act/Harvest";
-import { Pickup as ActPickup } from "Act/Pickup";
-import { Transfer as ActTransfer } from "Act/Transfer";
-import { Withdraw as ActWithdraw } from "Act/Withdraw";
 import { Task } from "./Task";
 
 export const TRANSFER = 0;
 export const COLLECT = 1;
 
 export class Transfer implements Task {
-  public acts: Act[];
+  public acts: Act.Act[];
   public parts: BodyPartConstant[];
 
-  public constructor(transfer: ActTransfer, collect: ActHarvest | ActPickup | ActWithdraw) {
+  public constructor(transfer: Act.Transfer, collect: Act.Collect) {
     this.acts = [transfer, collect];
-    this.parts = getParts(this.acts);
+    this.parts = Act.getParts(this.acts);
   }
 
   public perform(creep: Creep): void {
