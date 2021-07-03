@@ -2,9 +2,6 @@ import * as Act from "Act/Act";
 import { getStatus, moveTo, setStatus } from "Creep";
 import { Task } from "./Task";
 
-export const TRANSFER = 0;
-export const COLLECT = 1;
-
 export class Transfer implements Task {
   public acts: Act.Act[];
   public parts: BodyPartConstant[];
@@ -15,6 +12,9 @@ export class Transfer implements Task {
   }
 
   public perform(creep: Creep): void {
+    const TRANSFER = 0;
+    const COLLECT = 1;
+
     const status = getStatus(creep, [TRANSFER, COLLECT]);
     const act = this.acts[status];
 

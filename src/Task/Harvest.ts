@@ -2,9 +2,6 @@ import * as Act from "Act/Act";
 import { getStatus, moveTo, setStatus } from "Creep";
 import { Task } from "./Task";
 
-export const HARVEST = 0;
-export const TRANSFER = 1;
-
 export class Harvest implements Task {
   public acts: Act.Act[];
   public parts = [WORK, WORK, WORK, CARRY, MOVE];
@@ -14,6 +11,9 @@ export class Harvest implements Task {
   }
 
   public perform(creep: Creep): void {
+    const HARVEST = 0;
+    const TRANSFER = 1;
+
     const status = getStatus(creep, [HARVEST, TRANSFER]);
     const act = this.acts[status];
 

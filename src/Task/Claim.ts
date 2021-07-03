@@ -2,8 +2,6 @@ import * as Act from "Act/Act";
 import { Task } from "./Task";
 import { moveTo } from "Creep";
 
-export const CLAIM = 0;
-
 export class Claim implements Task {
   public acts: Act.Act[];
   public parts: BodyPartConstant[];
@@ -14,6 +12,8 @@ export class Claim implements Task {
   }
 
   public perform(creep: Creep): void {
+    const CLAIM = 0;
+
     const act = this.acts[CLAIM];
 
     switch (act.execute(creep)) {

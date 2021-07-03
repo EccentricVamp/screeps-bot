@@ -4,22 +4,22 @@ require('lodash');
 var Act = require('./Act.js');
 var Creep = require('./Creep.js');
 
-const BUILD = 0;
-const ENERGIZE$2 = 1;
 class Build {
     constructor(build, energize) {
         this.acts = [build, energize];
         this.parts = Act.getParts(this.acts);
     }
     perform(creep) {
-        const status = Creep.getStatus(creep, [BUILD, ENERGIZE$2]);
+        const BUILD = 0;
+        const ENERGIZE = 1;
+        const status = Creep.getStatus(creep, [BUILD, ENERGIZE]);
         const act = this.acts[status];
         switch (act.execute(creep)) {
             case ERR_NOT_IN_RANGE:
                 Creep.moveTo(creep, act.target);
                 break;
             case ERR_NOT_ENOUGH_ENERGY:
-                Creep.setStatus(creep, ENERGIZE$2);
+                Creep.setStatus(creep, ENERGIZE);
                 break;
             case ERR_FULL:
                 Creep.setStatus(creep, BUILD);
@@ -28,13 +28,13 @@ class Build {
     }
 }
 
-const CLAIM = 0;
 class Claim {
     constructor(claim) {
         this.acts = [claim];
         this.parts = Act.getParts(this.acts);
     }
     perform(creep) {
+        const CLAIM = 0;
         const act = this.acts[CLAIM];
         switch (act.execute(creep)) {
             case ERR_NOT_IN_RANGE:
@@ -44,15 +44,15 @@ class Claim {
     }
 }
 
-const HARVEST = 0;
-const TRANSFER$1 = 1;
 class Harvest {
     constructor(harvest, transfer) {
         this.parts = [WORK, WORK, WORK, CARRY, MOVE];
         this.acts = [harvest, transfer];
     }
     perform(creep) {
-        const status = Creep.getStatus(creep, [HARVEST, TRANSFER$1]);
+        const HARVEST = 0;
+        const TRANSFER = 1;
+        const status = Creep.getStatus(creep, [HARVEST, TRANSFER]);
         const act = this.acts[status];
         switch (act.execute(creep)) {
             case ERR_NOT_IN_RANGE:
@@ -62,7 +62,7 @@ class Harvest {
                 Creep.setStatus(creep, HARVEST);
                 break;
             case ERR_FULL:
-                Creep.setStatus(creep, TRANSFER$1);
+                Creep.setStatus(creep, TRANSFER);
                 break;
         }
     }
@@ -117,14 +117,14 @@ class Renew {
     }
 }
 
-const TRANSFER = 0;
-const COLLECT = 1;
 class Transfer {
     constructor(transfer, collect) {
         this.acts = [transfer, collect];
         this.parts = Act.getParts(this.acts);
     }
     perform(creep) {
+        const TRANSFER = 0;
+        const COLLECT = 1;
         const status = Creep.getStatus(creep, [TRANSFER, COLLECT]);
         const act = this.acts[status];
         switch (act.execute(creep)) {
@@ -141,22 +141,22 @@ class Transfer {
     }
 }
 
-const REPAIR = 0;
-const ENERGIZE$1 = 1;
 class Repair {
     constructor(repair, energize) {
         this.acts = [repair, energize];
         this.parts = Act.getParts(this.acts);
     }
     perform(creep) {
-        const status = Creep.getStatus(creep, [REPAIR, ENERGIZE$1]);
+        const REPAIR = 0;
+        const ENERGIZE = 1;
+        const status = Creep.getStatus(creep, [REPAIR, ENERGIZE]);
         const act = this.acts[status];
         switch (act.execute(creep)) {
             case ERR_NOT_IN_RANGE:
                 Creep.moveTo(creep, act.target);
                 break;
             case ERR_NOT_ENOUGH_ENERGY:
-                Creep.setStatus(creep, ENERGIZE$1);
+                Creep.setStatus(creep, ENERGIZE);
                 break;
             case ERR_FULL:
                 Creep.setStatus(creep, REPAIR);
@@ -165,14 +165,14 @@ class Repair {
     }
 }
 
-const UPGRADE = 0;
-const ENERGIZE = 1;
 class Upgrade {
     constructor(upgrade, energize) {
         this.acts = [upgrade, energize];
         this.parts = Act.getParts(this.acts);
     }
     perform(creep) {
+        const UPGRADE = 0;
+        const ENERGIZE = 1;
         const status = Creep.getStatus(creep, [UPGRADE, ENERGIZE]);
         const act = this.acts[status];
         switch (act.execute(creep)) {

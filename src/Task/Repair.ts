@@ -2,9 +2,6 @@ import * as Act from "Act/Act";
 import { getStatus, moveTo, setStatus } from "Creep";
 import { Task } from "./Task";
 
-export const REPAIR = 0;
-export const ENERGIZE = 1;
-
 export class Repair implements Task {
   public acts: Act.Act[];
   public parts: BodyPartConstant[];
@@ -15,6 +12,9 @@ export class Repair implements Task {
   }
 
   public perform(creep: Creep): void {
+    const REPAIR = 0;
+    const ENERGIZE = 1;
+
     const status = getStatus(creep, [REPAIR, ENERGIZE]);
     const act = this.acts[status];
 
