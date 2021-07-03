@@ -8,7 +8,7 @@ export default {
   input: "src/main.ts",
   external: ["lodash"],
   output: {
-    file: "dist/main.js",
+    dir: "dist",
     format: "cjs",
     interop: "esModule"
   },
