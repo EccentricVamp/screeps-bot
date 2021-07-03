@@ -9,7 +9,7 @@ export class Idle implements Task {
     this.target = target;
   }
 
-  public perform(creep: Creep): boolean {
-    return creep.moveTo(this.target) === ERR_NO_PATH;
+  public perform(creep: Creep): void {
+    creep.moveTo(this.target);
   }
 }

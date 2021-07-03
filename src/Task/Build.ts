@@ -1,24 +1,25 @@
-import * as Act from "Act/Act";
+import { Act, getParts } from "Act/Act";
 import { getStatus, moveTo, setStatus } from "Creep";
+import { Build as ActBuild } from "Act/Build";
+import { Harvest as ActHarvest } from "Act/Harvest";
+import { Pickup as ActPickup } from "Act/Pickup";
+import { Withdraw as ActWithdraw } from "Act/Withdraw";
 import { Task } from "./Task";
 
-export const BUILDING = 0;
-export const ENERGIZING = 1;
+export const BUILD = 0;
+export const ENERGIZE = 1;
 
 export class Build implements Task {
-  private site: ConstructionSite;
-
-  public acts: Act.Act[];
+  public acts: Act[];
   public parts: BodyPartConstant[];
 
-  public constructor(building: Act.Build, energizing: Act.Harvest | Act.Pickup | Act.Withdraw) {
-    this.site = building.target;
-    this.acts = [building, energizing];
-    this.parts = Act.getParts(this.acts);
+  public constructor(build: ActBuild, energize: ActHarvest | ActPickup | ActWithdraw) {
+    this.acts = [build, energize];
+    this.parts = getParts(this.acts);
   }
 
-  public perform(creep: Creep): boolean {
-    const status = getStatus(creep, [BUILDING, ENERGIZING]);
+  public perform(creep: Creep): void {
+    const status = getStatus(creep, [BUILD, ENERGIZE]);
     const act = this.acts[status];
 
     switch (act.execute(creep)) {
@@ -26,15 +27,13 @@ export class Build implements Task {
         moveTo(creep, act.target);
         break;
       case ERR_NOT_ENOUGH_ENERGY:
-        setStatus(creep, ENERGIZING);
+        setStatus(creep, ENERGIZE);
         break;
       case ERR_FULL:
-        setStatus(creep, BUILDING);
+        setStatus(creep, BUILD);
         break;
       default:
         break;
     }
-
-    return this.site.progress === this.site.progressTotal;
   }
 }

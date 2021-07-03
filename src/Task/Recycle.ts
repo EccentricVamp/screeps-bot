@@ -1,31 +1,28 @@
-import * as Act from "Act/Act";
 import { moveTo, setStatus } from "Creep";
+import { Act } from "Act/Act";
+import { Recycle as ActRecycle } from "Act/Recycle";
 import { Task } from "./Task";
 
-export const RECYCLING = 98;
+export const RECYCLE = 98;
 
 export class Recycle implements Task {
-  public acts: Act.Act[];
+  public acts: Act[];
   public parts = [];
 
-  public constructor(recycling: Act.Recycle) {
-    this.acts = [recycling];
+  public constructor(recycle: ActRecycle) {
+    this.acts = [recycle];
   }
 
-  public perform(creep: Creep): boolean {
-    setStatus(creep, RECYCLING);
+  public perform(creep: Creep): void {
+    setStatus(creep, RECYCLE);
     const act = this.acts[0];
 
     switch (act.execute(creep)) {
       case ERR_NOT_IN_RANGE:
         moveTo(creep, act.target);
         break;
-      case ERR_INVALID_TARGET:
-        return true;
       default:
         break;
     }
-
-    return false;
   }
 }

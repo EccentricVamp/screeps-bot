@@ -1,24 +1,25 @@
-import * as Act from "Act/Act";
+import { Act, getParts } from "Act/Act";
 import { getStatus, moveTo, setStatus } from "Creep";
+import { Harvest as ActHarvest } from "Act/Harvest";
+import { Pickup as ActPickup } from "Act/Pickup";
+import { Repair as ActRepair } from "Act/Repair";
+import { Withdraw as ActWithdraw } from "Act/Withdraw";
 import { Task } from "./Task";
 
-export const REPAIRING = 0;
-export const ENERGIZING = 1;
+export const REPAIR = 0;
+export const ENERGIZE = 1;
 
 export class Repair implements Task {
-  private structure: Structure;
-
-  public acts: Act.Act[];
+  public acts: Act[];
   public parts: BodyPartConstant[];
 
-  public constructor(repairing: Act.Repair, energizing: Act.Harvest | Act.Pickup | Act.Withdraw) {
-    this.structure = repairing.target;
-    this.acts = [repairing, energizing];
-    this.parts = Act.getParts(this.acts);
+  public constructor(repair: ActRepair, energize: ActHarvest | ActPickup | ActWithdraw) {
+    this.acts = [repair, energize];
+    this.parts = getParts(this.acts);
   }
 
-  public perform(creep: Creep): boolean {
-    const status = getStatus(creep, [REPAIRING, ENERGIZING]);
+  public perform(creep: Creep): void {
+    const status = getStatus(creep, [REPAIR, ENERGIZE]);
     const act = this.acts[status];
 
     switch (act.execute(creep)) {
@@ -26,15 +27,13 @@ export class Repair implements Task {
         moveTo(creep, act.target);
         break;
       case ERR_NOT_ENOUGH_ENERGY:
-        setStatus(creep, ENERGIZING);
+        setStatus(creep, ENERGIZE);
         break;
       case ERR_FULL:
-        setStatus(creep, REPAIRING);
+        setStatus(creep, REPAIR);
         break;
       default:
         break;
     }
-
-    return this.structure.hits === this.structure.hitsMax;
   }
 }
