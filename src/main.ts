@@ -1,18 +1,9 @@
+import "global";
 import * as Act from "act/act";
 import * as Creep from "creep";
 import * as Filter from "filter";
 import * as Task from "task/task";
 import { first, pull, sortBy } from "lodash";
-
-declare global {
-  interface CreepMemory {
-    status: number | null | undefined;
-  }
-
-  interface Memory {
-    claims: Id<StructureController>[];
-  }
-}
 
 function maintain(room: Room): void {
   const spawns = room.find(FIND_MY_SPAWNS);
@@ -95,9 +86,11 @@ function maintain(room: Room): void {
     task.perform(creep);
   }
 
-  const idle = Task.Factory.Idle(Game.flags.Idle);
-  for (const creep of creeps) {
-    idle.perform(creep);
+  if (Game.flags.Idle !== undefined) {
+    const idle = Task.Factory.Idle(Game.flags.Idle);
+    for (const creep of creeps) {
+      idle.perform(creep);
+    }
   }
 }
 

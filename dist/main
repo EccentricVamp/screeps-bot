@@ -77,9 +77,11 @@ function maintain(room) {
         lodash.pull(creeps, creep);
         task.perform(creep);
     }
-    const idle = task.Factory.Idle(Game.flags.Idle);
-    for (const creep of creeps) {
-        idle.perform(creep);
+    if (Game.flags.Idle !== undefined) {
+        const idle = task.Factory.Idle(Game.flags.Idle);
+        for (const creep of creeps) {
+            idle.perform(creep);
+        }
     }
 }
 /** Get the best creep for a given task. */
