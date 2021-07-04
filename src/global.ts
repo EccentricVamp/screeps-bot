@@ -1,6 +1,7 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 declare global {
   interface CreepMemory {
-    status: any;
+    status: number | undefined | null;
   }
 }
 
