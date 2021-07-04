@@ -1,6 +1,5 @@
 {
     "[javascript]": {
-
         "editor.formatOnSave": false
     },
     "[json]": {
@@ -19,14 +18,18 @@
     },
     "files.encoding": "utf8",
     "files.exclude": {
-        "**/.git": true,
-        "**/node_modules": true,
+        ".git": true,
+        ".gitattributes": true,
+        ".gitignore": true,
+        ".eslintignore": true,
+        ".prettierignore": true,
+        ".prettierrc.json": true,
+        "node_modules": true,
         "package-lock.json": true
     },
     "files.insertFinalNewline": true,
     "files.trimTrailingWhitespace": true,
     "search.exclude": {
-        ".rpt2_cache/**": true,
         "dist/**": true,
         "node_modules/**": true,
         "typings/**": true
